@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Video Generator & Poster - Music & Voice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .tiktok-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #25F4EE, #FE2C55);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .topic-input {
+            margin-bottom: 20px;
+        }
+
+        .topic-input label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .topic-input input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .topic-input input:focus {
+            outline: none;
+            border-color: #FE2C55;
+        }
+
+        .or-divider {
+            text-align: center;
+            margin: 20px 0;
+            color: #999;
+            position: relative;
+        }
+
+        .or-divider::before,
+        .or-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .or-divider::before { left: 0; }
+        .or-divider::after { right: 0; }
+
+        .suggestions {
+            margin-top: 20px;
+        }
+
+        .suggestions h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .suggestion-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .suggestion-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .suggestion-card:hover {
+            border-color: #FE2C55;
+            transform: translateX(5px);
+        }
+
+        .suggestion-card.selected {
+            border-color: #FE2C55;
+            background: linear-gradient(135deg, #fff0f3 0%, #ffe4ea 100%);
+        }
+
+        .suggestion-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #25F4EE, #FE2C55);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .suggestion-content h4 {
+            color: #333;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .suggestion-content p {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .audio-options {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .audio-options h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .audio-type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .audio-type-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .audio-type-btn:hover {
+            border-color: #FE2C55;
+        }
+
+        .audio-type-btn.selected {
+            border-color: #FE2C55;
+            background: linear-gradient(135deg, #fff0f3 0%, #ffe4ea 100%);
+        }
+
+        .audio-type-btn .icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .audio-type-btn .label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .audio-type-btn .sublabel {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .music-library {
+            display: none;
+        }
+
+        .music-library.active {
+            display: block;
+        }
+
+        .music-categories {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .music-category {
+            padding: 8px 16px;
+            background: #e0e0e0;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .music-category:hover,
+        .music-category.active {
+            background: #FE2C55;
+            color: white;
+        }
+
+        .music-tracks {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .music-track {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .music-track:hover {
+            background: #f0f0f0;
+        }
+
+        .music-track.selected {
+            background: linear-gradient(135deg, #fff0f3 0%, #ffe4ea 100%);
+        }
+
+        .music-track .play-btn {
+            width: 40px;
+            height: 40px;
+            background: #FE2C55;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .music-track .track-info {
+            flex: 1;
+        }
+
+        .music-track .track-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .music-track .track-artist {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .music-track .track-duration {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .voice-options {
+            display: none;
+        }
+
+        .voice-options.active {
+            display: block;
+        }
+
+        .voice-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .voice-option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .voice-option:hover {
+            border-color: #25F4EE;
+        }
+
+        .voice-option.selected {
+            border-color: #25F4EE;
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+        }
+
+        .voice-option .voice-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .voice-option .voice-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .voice-option .voice-desc {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .script-input {
+            margin-top: 15px;
+        }
+
+        .script-input label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .script-input textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .script-input textarea:focus {
+            outline: none;
+            border-color: #25F4EE;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #25F4EE, #FE2C55);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(254, 44, 85, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .generating {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f0f0f0;
+            border-top-color: #FE2C55;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #25F4EE, #FE2C55);
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        .video-preview-container {
+            margin-bottom: 20px;
+        }
+
+        .video-preview {
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 9/16;
+            max-height: 400px;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .video-placeholder .play-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(254, 44, 85, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .video-placeholder .play-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .video-audio-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.7);
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .video-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .video-info h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .video-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .video-specs span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .audio-details {
+            background: linear-gradient(135deg, #e0f7fa 0%, #f3e5f5 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .audio-details h5 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .audio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .post-options {
+            margin-bottom: 20px;
+        }
+
+        .option-group {
+            margin-bottom: 15px;
+        }
+
+        .option-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .option-group input,
+        .option-group textarea,
+        .option-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .option-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .hashtag-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .hashtag-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .hashtag-tag:hover {
+            background: #1976d2;
+            color: white;
+        }
+
+        .auth-section {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .auth-section p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .connected-account {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f0f9ff;
+            border: 2px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .account-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #25F4EE, #FE2C55);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .account-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .account-info h4 {
+            color: #333;
+            font-size: 16px;
+        }
+
+        .account-info p {
+            color: #0ea5e9;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .switch-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .nav-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            transition: all 0.3s;
+        }
+
+        .nav-dot.active {
+            background: #FE2C55;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        .step-indicator {
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .back-btn:hover {
+            color: #FE2C55;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .volume-control input[type="range"] {
+            flex: 1;
+        }
+
+        .volume-label {
+            font-size: 12px;
+            color: #666;
+            min-width: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="tiktok-logo">♪</div>
+            <h1>TikTok Video Generator</h1>
+            <p>Generate videos with music, voiceover, or both!</p>
+        </div>
+
+        <div class="step-indicator">
+            Step <span id="currentStep">1</span> of 4
+        </div>
+
+        <div class="step active" id="step1">
+            <div class="topic-input">
+                <label for="topic">What topic should your video be about?</label>
+                <input type="text" id="topic" placeholder="e.g., productivity tips, fitness motivation, cooking hacks...">
+            </div>
+
+            <div class="or-divider">OR CHOOSE A SUGGESTION</div>
+
+            <div class="suggestions">
+                <h3>🔥 Trending Topics</h3>
+                <div class="suggestion-cards" id="suggestionCards"></div>
+            </div>
+
+            <div class="audio-options">
+                <h3>🎵 Choose Audio Type</h3>
+                <div class="audio-type-selector">
+                    <div class="audio-type-btn selected" data-type="music">
+                        <div class="icon">🎵</div>
+                        <div class="label">Background Music</div>
+                        <div class="sublabel">Trending tracks</div>
+                    </div>
+                    <div class="audio-type-btn" data-type="voice">
+                        <div class="icon">🎙️</div>
+                        <div class="label">AI Voiceover</div>
+                        <div class="sublabel">Text-to-speech</div>
+                    </div>
+                    <div class="audio-type-btn" data-type="both">
+                        <div class="icon">🎵🎙️</div>
+                        <div class="label">Both</div>
+                        <div class="sublabel">Music + Voice</div>
+                    </div>
+                </div>
+
+                <div class="music-library active" id="musicLibrary">
+                    <div class="music-categories">
+                        <div class="music-category active">Trending</div>
+                        <div class="music-category">Upbeat</div>
+                        <div class="music-category">Chill</div>
+                        <div class="music-category">Motivational</div>
+                        <div class="music-category">Funny</div>
+                    </div>
+                    <div class="music-tracks" id="musicTracks"></div>
+                    
+                    <div class="volume-control">
+                        <span>🔊</span>
+                        <input type="range" min="0" max="100" value="70" id="musicVolume">
+                        <span class="volume-label" id="musicVolumeLabel">70%</span>
+                    </div>
+                </div>
+
+                <div class="voice-options" id="voiceOptions">
+                    <div class="voice-selector">
+                        <div class="voice-option selected" data-voice="nova">
+                            <div class="voice-icon">👩</div>
+                            <div class="voice-name">Nova</div>
+                            <div class="voice-desc">Friendly, female</div>
+                        </div>
+                        <div class="voice-option" data-voice="echo">
+                            <div class="voice-icon">👨</div>
+                            <div class="voice-name">Echo</div>
+                            <div class="voice-desc">Calm, male</div>
+                        </div>
+                        <div class="voice-option" data-voice="alloy">
+                            <div class="voice-icon">🧑</div>
+                            <div class="voice-name">Alloy</div>
+                            <div class="voice-desc">Neutral, versatile</div>
+                        </div>
+                        <div class="voice-option" data-voice="shimmer">
+                            <div class="voice-icon">👱‍♀️</div>
+                            <div class="voice-name">Shimmer</div>
+                            <div class="voice-desc">Energetic, female</div>
+                        </div>
+                    </div>
+                    
+                    <div class="script-input">
+                        <label>Voiceover Script (or use auto-generated)</label>
+                        <textarea id="voiceScript" placeholder="Enter your script here, or leave empty for AI-generated script based on your topic..."></textarea>
+                    </div>
+
+                    <div class="volume-control">
+                        <span>🎙️</span>
+                        <input type="range" min="0" max="100" value="80" id="voiceVolume">
+                        <span class="volume-label" id="voiceVolumeLabel">80%</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="generateBtn" disabled>
+                Generate Video
+            </button>
+        </div>
+
+        <div class="step" id="step2">
+            <div class="generating">
+                <div class="spinner"></div>
+                <h3>Generating Your TikTok Video...</h3>
+                <p id="generationStatus">Initializing...</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div id="generationDetails" style="margin-top: 20px; font-size: 13px; color: #666;"></div>
+            </div>
+        </div>
+
+        <div class="step" id="step3">
+            <button class="back-btn" onclick="goToStep(1)">← Back</button>
+            
+            <div class="video-preview-container">
+                <div class="video-preview">
+                    <div class="video-placeholder" id="videoPlaceholder">
+                        <div class="play-icon">▶</div>
+                        <p>Your Generated Video</p>
+                        <p style="font-size: 12px; opacity: 0.7; margin-top: 10px;">Click to preview</p>
+                    </div>
+                    <div class="video-audio-indicator" id="audioIndicator">
+                        🎵 Music + 🎙️ Voice
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-info">
+                <h4>🎬 Video Details</h4>
+                <div class="video-specs">
+                    <span>📐 1080 x 1920 (9:16)</span>
+                    <span>⏱️ 45 seconds</span>
+                    <span>📁 MP4 (H.264)</span>
+                    <span>🎬 60 FPS</span>
+                </div>
+                
+                <div class="audio-details" id="audioDetails">
+                    <h5>🎵 Audio Configuration</h5>
+                    <div id="audioList"></div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="proceedToPostBtn">
+                Proceed to Post →
+            </button>
+            <button class="btn btn-secondary" id="regenerateBtn">
+                🔄 Regenerate Video
+            </button>
+        </div>
+
+        <div class="step" id="step4">
+            <button class="back-btn" onclick="goToStep(3)">← Back</button>
+            
+            <div id="authMessage" class="message"></div>
+
+            <div class="auth-section" id="notConnected">
+                <p>Connect your TikTok account to post videos directly</p>
+                <button class="btn btn-primary" id="connectTikTokBtn">
+                    Connect TikTok Account
+                </button>
+                <p style="margin-top: 15px; font-size: 12px; color: #999;">
+                    Secure OAuth authentication via TikTok
+                </p>
+            </div>
+
+            <div id="connected" style="display: none;">
+                <div class="connected-account">
+                    <div class="account-avatar">👤</div>
+                    <div class="account-info">
+                        <h4>@username</h4>
+                        <p>✓ Connected</p>
+                    </div>
+                    <button class="switch-btn" id="switchAccountBtn">Switch</button>
+                </div>
+
+                <div class="post-options">
+                    <div class="option-group">
+                        <label for="caption">Caption</label>
+                        <textarea id="caption" maxlength="2200" placeholder="Write an engaging caption..."></textarea>
+                        <div class="hashtag-suggestions" id="hashtagSuggestions"></div>
+                    </div>
+
+                    <div class="option-group">
+                        <label for="privacy">Privacy</label>
+                        <select id="privacy">
+                            <option value="PUBLIC">🌎 Public - Everyone can see</option>
+                            <option value="FRIENDS">👥 Friends - Followers only</option>
+                            <option value="PRIVATE">🔒 Private - Only you</option>
+                        </select>
+                    </div>
+
+                    <div class="option-group">
+                        <label>Interactions</label>
+                        <label style="font-weight: normal; margin-bottom: 8px;">
+                            <input type="checkbox" id="allowDuet" checked> Allow Duet
+                        </label>
+                        <label style="font-weight: normal; margin-bottom: 8px;">
+                            <input type="checkbox" id="allowStitch" checked> Allow Stitch
+                        </label>
+                        <label style="font-weight: normal;">
+                            <input type="checkbox" id="allowComment" checked> Allow Comments
+                        </label>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" id="postToTikTokBtn">
+                    📤 Post to TikTok
+                </button>
+            </div>
+        </div>
+
+        <div class="nav-dots">
+            <div class="nav-dot active" data-step="1"></div>
+            <div class="nav-dot" data-step="2"></div>
+            <div class="nav-dot" data-step="3"></div>
+            <div class="nav-dot" data-step="4"></div>
+        </div>
+    </div>
+
+    <script>
+        const trendingTopics = [
+            {
+                id: 1,
+                icon: '💡',
+                title: 'Quick Productivity Hacks',
+                description: '3 tips to boost your productivity in 60 seconds',
+                hashtags: ['#productivity', '#hacks', '#worksmart', '#efficiency'],
+                duration: '45-60s',
+                hook: 'Stop wasting time on this...',
+                script: "Here are 3 productivity hacks that changed my life. First, use the two-minute rule. Second, batch similar tasks together. Third, take strategic breaks. Try these today!"
+            },
+            {
+                id: 2,
+                icon: '💪',
+                title: 'Morning Fitness Routine',
+                description: '5-minute workout you can do anywhere',
+                hashtags: ['#fitness', '#morningroutine', '#workout', '#health'],
+                duration: '30-45s',
+                hook: 'This 5-minute routine changed my life...',
+                script: "Ready for a quick morning boost? Let's do this 5-minute routine together. Jumping jacks, push-ups, squats, and stretches. No equipment needed. Let's get moving!"
+            },
+            {
+                id: 3,
+                icon: '🍳',
+                title: 'Easy 3-Ingredient Recipes',
+                description: 'Quick meals anyone can make',
+                hashtags: ['#cooking', '#easyrecipe', '#foodtok', '#quickmeals'],
+                duration: '30-60s',
+                hook: '3 ingredients, 5 minutes, amazing taste...',
+                script: "Hungry but lazy? This 3-ingredient recipe is perfect. All you need is pasta, butter, and cheese. Cook, mix, enjoy. Simple, delicious, and ready in 10 minutes!"
+            },
+            {
+                id: 4,
+                icon: '💰',
+                title: 'Money Saving Tips',
+                description: 'Simple ways to save $100s every month',
+                hashtags: ['#money', '#saving', '#finance', '#budget'],
+                duration: '45-60s',
+                hook: 'I saved $500 last month by doing this...',
+                script: "Want to save more money? Here's how I saved 500 dollars last month. Track every expense, cancel unused subscriptions, meal prep instead of eating out, and use cashback apps."
+            },
+            {
+                id: 5,
+                icon: '🧠',
+                title: 'Psychology Facts',
+                description: 'Mind-blowing facts about human behavior',
+                hashtags: ['#psychology', '#facts', '#mindblowing', '#learnontiktok'],
+                duration: '30-45s',
+                hook: 'Your brain is lying to you about this...',
+                script: "Your brain plays tricks on you every day. Did you know the Dunning-Kruger effect makes unskilled people overestimate themselves? Or that confirmation bias filters what you believe?"
+            },
+            {
+                id: 6,
+                icon: '🎨',
+                title: 'DIY Home Decor',
+                description: 'Transform your space on a budget',
+                hashtags: ['#diy', '#homedecor', '#transformation', '#crafts'],
+                duration: '45-60s',
+                hook: 'I transformed this room for under $50...',
+                script: "Want to upgrade your room for cheap? I transformed mine for under 50 dollars. Thrift store finds, DIY wall art, and plants. Small changes, huge difference!"
+            }
+        ];
+
+        const musicTracks = [
+            { id: 1, name: "Trending Pop 2024", artist: "TikTok Sounds", duration: "0:30", category: "Trending" },
+            { id: 2, name: "Upbeat Vibes", artist: "Energy Beats", duration: "0:45", category: "Upbeat" },
+            { id: 3, name: "Lo-Fi Study", artist: "Chill Hop", duration: "1:00", category: "Chill" },
+            { id: 4, name: "Motivational Anthem", artist: "Inspire", duration: "0:35", category: "Motivational" },
+            { id: 5, name: "Funny Moments", artist: "Comedy Tunes", duration: "0:25", category: "Funny" },
+            { id: 6, name: "Viral Dance Beat", artist: "TikTok Official", duration: "0:30", category: "Trending" },
+            { id: 7, name: "Morning Coffee", artist: "Acoustic Vibes", duration: "0:40", category: "Chill" },
+            { id: 8, name: "Workout Pump", artist: "Fitness Music", duration: "0:50", category: "Motivational" }
+        ];
+
+        let currentStep = 1;
+        let selectedTopic = null;
+        let selectedAudioType = 'music';
+        let selectedMusic = musicTracks[0];
+        let selectedVoice = 'nova';
+        let musicVolume = 70;
+        let voiceVolume = 80;
+        let isAuthenticated = false;
+
+        const topicInput = document.getElementById('topic');
+        const generateBtn = document.getElementById('generateBtn');
+        const suggestionCards = document.getElementById('suggestionCards');
+        const musicTracksContainer = document.getElementById('musicTracks');
+        const progressFill = document.getElementById('progressFill');
+        const generationStatus = document.getElementById('generationStatus');
+        const generationDetails = document.getElementById('generationDetails');
+
+        function init() {
+            renderSuggestions();
+            renderMusicTracks();
+            setupEventListeners();
+        }
+
+        function renderSuggestions() {
+            suggestionCards.innerHTML = trendingTopics.map(topic => `
+                <div class="suggestion-card" data-id="${topic.id}">
+                    <div class="suggestion-icon">${topic.icon}</div>
+                    <div class="suggestion-content">
+                        <h4>${topic.title}</h4>
+                        <p>${topic.description}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.suggestion-card').forEach(card => {
+                card.addEventListener('click', () => selectSuggestion(card));
+            });
+        }
+
+        function renderMusicTracks(category = 'Trending') {
+            const filtered = category === 'Trending' ? musicTracks : musicTracks.filter(t => t.category === category);
+            
+            musicTracksContainer.innerHTML = filtered.map(track => `
+                <div class="music-track ${track.id === selectedMusic.id ? 'selected' : ''}" data-id="${track.id}">
+                    <div class="play-btn">▶</div>
+                    <div class="track-info">
+                        <div class="track-name">${track.name}</div>
+                        <div class="track-artist">${track.artist}</div>
+                    </div>
+                    <div class="track-duration">${track.duration}</div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.music-track').forEach(track => {
+                track.addEventListener('click', () => selectMusic(track));
+            });
+        }
+
+        function selectSuggestion(card) {
+            document.querySelectorAll('.suggestion-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedTopic = trendingTopics.find(t => t.id === parseInt(card.dataset.id));
+            topicInput.value = selectedTopic.title;
+            updateGenerateButton();
+        }
+
+        function selectMusic(trackElement) {
+            document.querySelectorAll('.music-track').forEach(t => t.classList.remove('selected'));
+            trackElement.classList.add('selected');
+            selectedMusic = musicTracks.find(t => t.id === parseInt(trackElement.dataset.id));
+        }
+
+        function setupEventListeners() {
+            topicInput.addEventListener('input', (e) => {
+                if (e.target.value.trim()) {
+                    document.querySelectorAll('.suggestion-card').forEach(c => c.classList.remove('selected'));
+                    selectedTopic = null;
+                }
+                updateGenerateButton();
+            });
+
+            document.querySelectorAll('.audio-type-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.audio-type-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedAudioType = btn.dataset.type;
+                    
+                    document.getElementById('musicLibrary').classList.toggle('active', selectedAudioType !== 'voice');
+                    document.getElementById('voiceOptions').classList.toggle('active', selectedAudioType !== 'music');
+                });
+            });
+
+            document.querySelectorAll('.music-category').forEach(cat => {
+                cat.addEventListener('click', () => {
+                    document.querySelectorAll('.music-category').forEach(c => c.classList.remove('active'));
+                    cat.classList.add('active');
+                    renderMusicTracks(cat.textContent);
+                });
+            });
+
+            document.querySelectorAll('.voice-option').forEach(voice => {
+                voice.addEventListener('click', () => {
+                    document.querySelectorAll('.voice-option').forEach(v => v.classList.remove('selected'));
+                    voice.classList.add('selected');
+                    selectedVoice = voice.dataset.voice;
+                });
+            });
+
+            document.getElementById('musicVolume').addEventListener('input', (e) => {
+                musicVolume = e.target.value;
+                document.getElementById('musicVolumeLabel').textContent = musicVolume + '%';
+            });
+
+            document.getElementById('voiceVolume').addEventListener('input', (e) => {
+                voiceVolume = e.target.value;
+                document.getElementById('voiceVolumeLabel').textContent = voiceVolume + '%';
+            });
+
+            generateBtn.addEventListener('click', startGeneration);
+            document.getElementById('proceedToPostBtn').addEventListener('click', () => goToStep(4));
+            document.getElementById('regenerateBtn').addEventListener('click', () => goToStep(1));
+            document.getElementById('connectTikTokBtn').addEventListener('click', connectTikTok);
+            document.getElementById('postToTikTokBtn').addEventListener('click', postToTikTok);
+            document.getElementById('switchAccountBtn').addEventListener('click', disconnectTikTok);
+        }
+
+        function updateGenerateButton() {
+            generateBtn.disabled = !topicInput.value.trim();
+        }
+
+        function startGeneration() {
+            const topic = topicInput.value.trim();
+            if (!topic) return;
+
+            if (!selectedTopic) {
+                selectedTopic = {
+                    title: topic,
+                    description: `AI-generated video about ${topic}`,
+                    hashtags: ['#fyp', '#viral', '#trending', '#content'],
+                    duration: '30-60s',
+                    hook: `You won't believe this about ${topic}...`,
+                    script: `Here's everything you need to know about ${topic}. This will change how you think!`
+                };
+            }
+
+            goToStep(2);
+            simulateGeneration();
+        }
+
+        function getAudioConfig() {
+            const configs = [];
+            if (selectedAudioType === 'music' || selectedAudioType === 'both') {
+                configs.push(`🎵 Music: ${selectedMusic.name} (${musicVolume}%)`);
+            }
+            if (selectedAudioType === 'voice' || selectedAudioType === 'both') {
+                configs.push(`🎙️ Voice: ${selectedVoice} (${voiceVolume}%)`);
+            }
+            return configs.join(' + ');
+        }
+
+        function simulateGeneration() {
+            const audioConfig = getAudioConfig();
+            const steps = [
+                { progress: 10, status: 'Analyzing topic and TikTok trends...', detail: `Topic: ${selectedTopic.title}` },
+                { progress: 20, status: 'Generating video script with hook...', detail: `Hook: "${selectedTopic.hook}"` },
+                { progress: 30, status: 'Creating 9:16 vertical video format...', detail: 'Resolution: 1080x1920' },
+                { progress: 40, status: 'Applying fast-paced editing...', detail: 'Cuts every 2-3 seconds' },
+                { progress: 50, status: selectedAudioType !== 'voice' ? `Selecting background music: ${selectedMusic.name}...` : 'Skipping music...', detail: audioConfig },
+                { progress: 60, status: 'Generating AI voiceover...', detail: `Voice: ${selectedVoice} at ${voiceVolume}% volume` },
+                { progress: 70, status: 'Mixing audio tracks...', detail: 'Balancing music and voice levels' },
+                { progress: 80, status: 'Adding captions and text overlays...', detail: 'Auto-sync with voiceover' },
+                { progress: 90, status: 'Applying color grading and effects...', detail: 'TikTok-optimized visuals' },
+                { progress: 100, status: 'Finalizing with H.264 encoding...', detail: 'Ready for upload!' }
+            ];
+
+            steps.forEach((step, index) => {
+                setTimeout(() => {
+                    progressFill.style.width = step.progress + '%';
+                    generationStatus.textContent = step.status;
+                    generationDetails.textContent = step.detail;
+                    
+                    if (step.progress === 100) {
+                        setTimeout(() => {
+                            goToStep(3);
+                            updatePreview();
+                        }, 800);
+                    }
+                }, index * 600);
+            });
+        }
+
+        function updatePreview() {
+            const audioIndicator = document.getElementById('audioIndicator');
+            const audioList = document.getElementById('audioList');
+            
+            let indicatorText = '';
+            let audioHTML = '';
+            
+            if (selectedAudioType === 'music') {
+                indicatorText = '🎵 Background Music';
+                audioHTML = `
+                    <div class="audio-item">🎵 ${selectedMusic.name} - ${selectedMusic.artist}</div>
+                    <div class="audio-item">🔊 Volume: ${musicVolume}%</div>
+                `;
+            } else if (selectedAudioType === 'voice') {
+                indicatorText = '🎙️ AI Voiceover';
+                const script = document.getElementById('voiceScript').value || selectedTopic.script;
+                audioHTML = `
+                    <div class="audio-item">🎙️ Voice: ${selectedVoice}</div>
+                    <div class="audio-item">🔊 Volume: ${voiceVolume}%</div>
+                    <div class="audio-item">📝 Script: "${script.substring(0, 50)}..."</div>
+                `;
+            } else {
+                indicatorText = '🎵 Music + 🎙️ Voice';
+                const script = document.getElementById('voiceScript').value || selectedTopic.script;
+                audioHTML = `
+                    <div class="audio-item">🎵 ${selectedMusic.name} - ${selectedMusic.artist} (${musicVolume}%)</div>
+                    <div class="audio-item">🎙️ ${selectedVoice} voice (${voiceVolume}%)</div>
+                    <div class="audio-item">📝 "${script.substring(0, 40)}..."</div>
+                `;
+            }
+            
+            audioIndicator.textContent = indicatorText;
+            audioList.innerHTML = audioHTML;
+
+            const hashtagContainer = document.getElementById('hashtagSuggestions');
+            hashtagContainer.innerHTML = selectedTopic.hashtags.map(tag => 
+                `<span class="hashtag-tag">${tag}</span>`
+            ).join('');
+
+            document.querySelectorAll('.hashtag-tag').forEach(tag => {
+                tag.addEventListener('click', () => {
+                    const caption = document.getElementById('caption');
+                    caption.value += (caption.value ? ' ' : '') + tag.textContent;
+                });
+            });
+
+            const caption = document.getElementById('caption');
+            caption.value = `${selectedTopic.hook}\n\n${selectedTopic.hashtags.join(' ')}`;
+        }
+
+        function connectTikTok() {
+            showMessage('Connecting to TikTok...', 'success');
+            
+            setTimeout(() => {
+                isAuthenticated = true;
+                document.getElementById('notConnected').style.display = 'none';
+                document.getElementById('connected').style.display = 'block';
+            }, 1500);
+        }
+
+        function disconnectTikTok() {
+            isAuthenticated = false;
+            document.getElementById('notConnected').style.display = 'block';
+            document.getElementById('connected').style.display = 'none';
+        }
+
+        function postToTikTok() {
+            const caption = document.getElementById('caption').value;
+            
+            if (!caption.trim()) {
+                showMessage('Please add a caption!', 'error');
+                return;
+            }
+
+            const postBtn = document.getElementById('postToTikTokBtn');
+            postBtn.disabled = true;
+            postBtn.textContent = 'Uploading video & audio...';
+
+            setTimeout(() => {
+                showMessage('🎉 Video with audio posted successfully to TikTok!', 'success');
+                postBtn.disabled = false;
+                postBtn.textContent = '📤 Post to TikTok';
+            }, 2500);
+        }
+
+        function goToStep(step) {
+            currentStep = step;
+            document.getElementById('currentStep').textContent = step;
+            
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            document.querySelectorAll('.nav-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index + 1 === step);
+            });
+        }
+
+        function showMessage(text, type) {
+            const message = document.getElementById('authMessage');
+            message.textContent = text;
+            message.className = `message ${type}`;
+            setTimeout(() => message.style.display = 'none', 5000);
+            message.style.display = 'block';
+        }
+
+        init();
+    </script>
+</body>
+</html>
