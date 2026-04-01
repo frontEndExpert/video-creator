@@ -94,30 +94,12 @@
             font-size: 14px;
         }
 
-        .topic-input input:focus {
-            outline: none;
-            border-color: #FE2C55;
-        }
-
         .or-divider {
             text-align: center;
             margin: 15px 0;
             color: #999;
             font-size: 12px;
-            position: relative;
         }
-
-        .or-divider::before, .or-divider::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background: #e0e0e0;
-        }
-
-        .or-divider::before { left: 0; }
-        .or-divider::after { right: 0; }
 
         .suggestions h3 {
             color: #333;
@@ -125,19 +107,13 @@
             font-size: 14px;
         }
 
-        .suggestion-cards {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
         .suggestion-card {
             background: #f5f7fa;
             border: 2px solid transparent;
             border-radius: 10px;
             padding: 15px;
+            margin-bottom: 10px;
             cursor: pointer;
-            transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -157,17 +133,6 @@
             align-items: center;
             justify-content: center;
             font-size: 20px;
-        }
-
-        .suggestion-content h4 {
-            color: #333;
-            font-size: 14px;
-            margin-bottom: 3px;
-        }
-
-        .suggestion-content p {
-            color: #666;
-            font-size: 12px;
         }
 
         .audio-options {
@@ -205,18 +170,11 @@
             background: #fff0f3;
         }
 
-        .audio-type-btn .icon {
-            font-size: 20px;
-            display: block;
-            margin-bottom: 4px;
-        }
-
         .music-categories {
             display: flex;
             gap: 6px;
             margin-bottom: 12px;
-            overflow-x: auto;
-            padding-bottom: 5px;
+            flex-wrap: wrap;
         }
 
         .music-category {
@@ -225,17 +183,11 @@
             border-radius: 15px;
             font-size: 11px;
             cursor: pointer;
-            white-space: nowrap;
         }
 
         .music-category.active {
             background: #FE2C55;
             color: white;
-        }
-
-        .music-tracks {
-            max-height: 180px;
-            overflow-y: auto;
         }
 
         .music-track {
@@ -246,17 +198,14 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 12px;
-        }
-
-        .music-track:hover {
-            background: #f0f0f0;
+            margin-bottom: 5px;
         }
 
         .music-track.selected {
             background: #fff0f3;
         }
 
-        .music-track .preview-btn {
+        .preview-btn {
             width: 32px;
             height: 32px;
             background: #FE2C55;
@@ -265,18 +214,11 @@
             color: white;
             cursor: pointer;
             font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        .music-track .preview-btn:hover {
+        .preview-btn.playing {
             background: #25F4EE;
-        }
-
-        .music-track .preview-btn.playing {
-            background: #25F4EE;
-            animation: pulse 1s infinite;
+            animation: pulse 0.5s infinite;
         }
 
         @keyframes pulse {
@@ -284,33 +226,12 @@
             50% { transform: scale(1.1); }
         }
 
-        .music-track .track-info {
-            flex: 1;
-        }
-
-        .track-name {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .track-artist {
-            color: #666;
-            font-size: 11px;
-        }
-
         .track-badge {
             padding: 2px 8px;
             border-radius: 10px;
             color: white;
             font-size: 10px;
-        }
-
-        .voice-options {
-            display: none;
-        }
-
-        .voice-options.active {
-            display: block;
+            margin-left: auto;
         }
 
         .voice-selector {
@@ -334,37 +255,6 @@
             background: #e0f7fa;
         }
 
-        .voice-option .voice-icon {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .voice-preview-btn {
-            width: 100%;
-            padding: 10px;
-            background: linear-gradient(45deg, #25F4EE, #FE2C55);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
-        .voice-preview-btn:hover {
-            opacity: 0.9;
-        }
-
-        .volume-control {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .volume-control input {
-            flex: 1;
-        }
-
         .btn {
             width: 100%;
             padding: 14px;
@@ -383,7 +273,6 @@
 
         .btn-primary:disabled {
             opacity: 0.5;
-            cursor: not-allowed;
         }
 
         .btn-secondary {
@@ -426,15 +315,19 @@
             transition: width 0.3s;
         }
 
-        .video-container {
+        .video-result {
+            text-align: center;
+        }
+
+        .video-box {
             background: #000;
             border-radius: 12px;
             overflow: hidden;
-            position: relative;
             margin-bottom: 15px;
+            position: relative;
         }
 
-        #outputVideo {
+        #previewVideo {
             width: 100%;
             display: block;
             max-height: 400px;
@@ -442,215 +335,21 @@
 
         .video-fallback {
             padding: 60px 20px;
-            text-align: center;
             color: white;
             background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
         }
 
-        .video-fallback button {
-            margin-top: 15px;
-            padding: 12px 30px;
-            background: #FE2C55;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .video-overlay {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            display: flex;
-            justify-content: space-between;
-            pointer-events: none;
-        }
-
-        .video-badge {
-            background: rgba(254, 44, 85, 0.9);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-        }
-
-        .video-audio-badge {
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-        }
-
-        .video-caption {
-            position: absolute;
-            bottom: 50px;
-            left: 15px;
-            right: 15px;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            pointer-events: none;
-        }
-
-        .video-controls {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .video-controls button {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .video-progress {
-            flex: 1;
-            height: 4px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 2px;
-            cursor: pointer;
-        }
-
-        .video-progress-fill {
-            height: 100%;
-            background: #FE2C55;
-            border-radius: 2px;
-            width: 0%;
-        }
-
-        .video-time {
-            color: white;
-            font-size: 11px;
-            min-width: 70px;
-            text-align: right;
-        }
-
-        .video-info {
+        .video-info-box {
             background: #f8f9fa;
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 15px;
             font-size: 12px;
-        }
-
-        .video-info h4 {
-            margin-bottom: 10px;
-            font-size: 13px;
-        }
-
-        .video-specs {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            color: #666;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .action-buttons .btn {
-            flex: 1;
-            margin-top: 0;
-        }
-
-        .post-options {
-            margin-bottom: 15px;
-        }
-
-        .option-group {
-            margin-bottom: 12px;
-        }
-
-        .option-group label {
-            display: block;
-            margin-bottom: 6px;
-            color: #333;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .option-group input, .option-group textarea, .option-group select {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 13px;
-        }
-
-        .hashtag-suggestions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 8px;
-        }
-
-        .hashtag-tag {
-            background: #e3f2fd;
-            color: #1976d2;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-            cursor: pointer;
-        }
-
-        .auth-section {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .connected-account {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #f0f9ff;
-            border: 2px solid #0ea5e9;
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 15px;
-        }
-
-        .account-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, #25F4EE, #FE2C55);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .account-info {
-            flex: 1;
             text-align: left;
         }
 
-        .account-info h4 {
-            font-size: 14px;
-        }
-
-        .account-info p {
-            color: #0ea5e9;
-            font-size: 12px;
+        .hidden {
+            display: none !important;
         }
 
         .message {
@@ -658,19 +357,11 @@
             border-radius: 8px;
             margin-bottom: 15px;
             font-size: 13px;
-            display: none;
         }
 
         .message.success {
             background: #d4edda;
             color: #155724;
-            display: block;
-        }
-
-        .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            display: block;
         }
 
         .nav-dots {
@@ -693,23 +384,25 @@
             border-radius: 4px;
         }
 
-        .back-btn {
-            background: none;
-            border: none;
-            color: #666;
-            cursor: pointer;
-            font-size: 13px;
-            margin-bottom: 10px;
+        .playing-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 8px;
         }
 
-        .hidden {
-            display: none !important;
+        .playing-indicator span {
+            width: 3px;
+            height: 12px;
+            background: #25F4EE;
+            animation: sound 0.5s infinite alternate;
         }
 
-        .status-text {
-            color: #666;
-            font-size: 12px;
-            margin-top: 10px;
+        .playing-indicator span:nth-child(2) { animation-delay: 0.1s; }
+        .playing-indicator span:nth-child(3) { animation-delay: 0.2s; }
+
+        @keyframes sound {
+            to { height: 4px; }
         }
     </style>
 </head>
@@ -721,173 +414,142 @@
             <p>Create videos with music, voice, or both!</p>
         </div>
 
-        <div class="step-indicator">Step <span id="currentStep">1</span> of 4</div>
+        <div class="step-indicator">Step <span id="stepNum">1</span> of 4</div>
 
-        <!-- Step 1 -->
+        <!-- STEP 1 -->
         <div class="step active" id="step1">
             <div class="topic-input">
                 <label>What should your video be about?</label>
-                <input type="text" id="topicInput" placeholder="e.g., productivity tips, fitness...">
+                <input type="text" id="topicInput" placeholder="Enter a topic...">
             </div>
 
-            <div class="or-divider">OR SELECT A TOPIC</div>
+            <div class="or-divider">— OR SELECT —</div>
 
             <div class="suggestions">
                 <h3>🔥 Trending Topics</h3>
-                <div id="topicList"></div>
+                <div id="topicsList"></div>
             </div>
 
             <div class="audio-options">
                 <h3>🎵 Audio Type</h3>
                 <div class="audio-type-selector">
-                    <button class="audio-type-btn selected" onclick="setAudioType('music')">
-                        <span class="icon">🎵</span>
-                        <div>Music</div>
-                    </button>
-                    <button class="audio-type-btn" onclick="setAudioType('voice')">
-                        <span class="icon">🎙️</span>
-                        <div>Voice</div>
-                    </button>
-                    <button class="audio-type-btn" onclick="setAudioType('both')">
-                        <span class="icon">🎵🎙️</span>
-                        <div>Both</div>
-                    </button>
+                    <button class="audio-type-btn selected" onclick="setType('music')">🎵 Music</button>
+                    <button class="audio-type-btn" onclick="setType('voice')">🎙️ Voice</button>
+                    <button class="audio-type-btn" onclick="setType('both')">🎵🎙️ Both</button>
                 </div>
 
-                <!-- Music -->
-                <div id="musicSection">
+                <!-- MUSIC -->
+                <div id="musicBox">
                     <div class="music-categories">
-                        <span class="music-category active" onclick="filterMusic('Trending', this)">Trending</span>
-                        <span class="music-category" onclick="filterMusic('Upbeat', this)">Upbeat</span>
-                        <span class="music-category" onclick="filterMusic('Chill', this)">Chill</span>
-                        <span class="music-category" onclick="filterMusic('R&B', this)">R&B</span>
-                        <span class="music-category" onclick="filterMusic('Motivational', this)">Motivational</span>
+                        <span class="music-category active" onclick="filterCat('Trending', this)">Trending</span>
+                        <span class="music-category" onclick="filterCat('Upbeat', this)">Upbeat</span>
+                        <span class="music-category" onclick="filterCat('Chill', this)">Chill</span>
+                        <span class="music-category" onclick="filterCat('R&B', this)">R&B</span>
+                        <span class="music-category" onclick="filterCat('Motivational', this)">Motivational</span>
                     </div>
-                    <div class="music-tracks" id="trackList"></div>
-                    <div class="volume-control">
-                        <span>🔊</span>
-                        <input type="range" id="musicVol" min="0" max="100" value="70">
-                        <span id="musicVolDisplay">70%</span>
+                    <div id="tracksList"></div>
+                    <div style="margin-top:10px;">
+                        🔊 Volume: <input type="range" id="mVol" min="0" max="100" value="70" style="width:70%;"> <span id="mVolDisp">70%</span>
                     </div>
                 </div>
 
-                <!-- Voice -->
-                <div class="voice-options" id="voiceSection">
+                <!-- VOICE -->
+                <div id="voiceBox" class="hidden">
                     <div class="voice-selector">
-                        <div class="voice-option selected" onclick="selectVoice('nova', this)">
-                            <div class="voice-icon">👩</div>
-                            <div><strong>Nova</strong><br><small>Friendly</small></div>
+                        <div class="voice-option selected" onclick="setVoice('nova', this)">
+                            👩<br><strong>Nova</strong><br><small>Friendly Female</small>
                         </div>
-                        <div class="voice-option" onclick="selectVoice('echo', this)">
-                            <div class="voice-icon">👨</div>
-                            <div><strong>Echo</strong><br><small>Calm</small></div>
+                        <div class="voice-option" onclick="setVoice('echo', this)">
+                            👨<br><strong>Echo</strong><br><small>Calm Male</small>
                         </div>
-                        <div class="voice-option" onclick="selectVoice('alloy', this)">
-                            <div class="voice-icon">🧑</div>
-                            <div><strong>Alloy</strong><br><small>Neutral</small></div>
+                        <div class="voice-option" onclick="setVoice('alloy', this)">
+                            🧑<br><strong>Alloy</strong><br><small>Neutral</small>
                         </div>
-                        <div class="voice-option" onclick="selectVoice('shimmer', this)">
-                            <div class="voice-icon">👱‍♀️</div>
-                            <div><strong>Shimmer</strong><br><small>Energetic</small></div>
+                        <div class="voice-option" onclick="setVoice('shimmer', this)">
+                            👱‍♀️<br><strong>Shimmer</strong><br><small>Energetic Female</small>
                         </div>
                     </div>
-                    <textarea id="voiceText" placeholder="Enter script or leave blank for auto..." style="width:100%;padding:10px;border-radius:6px;border:2px solid #e0e0e0;min-height:60px;font-size:13px;margin:10px 0;"></textarea>
-                    <button class="voice-preview-btn" onclick="testVoice()">🔊 Test Voice</button>
-                    <div class="volume-control">
-                        <span>🎙️</span>
-                        <input type="range" id="voiceVol" min="0" max="100" value="80">
-                        <span id="voiceVolDisplay">80%</span>
+                    <textarea id="vScript" placeholder="Enter your voiceover script here, or leave blank for auto-generated..." style="width:100%;padding:10px;border-radius:6px;border:2px solid #e0e0e0;min-height:80px;font-size:13px;margin:10px 0;"></textarea>
+                    <button class="btn btn-secondary" onclick="testVoice()" style="margin-top:5px;">🔊 Preview Voice</button>
+                    <div style="margin-top:10px;">
+                        🎙️ Voice Volume: <input type="range" id="vVol" min="0" max="100" value="80" style="width:65%;"> <span id="vVolDisp">80%</span>
                     </div>
                 </div>
             </div>
 
-            <button class="btn btn-primary" id="genBtn" onclick="generate()" disabled>Generate Video</button>
+            <button class="btn btn-primary" id="startBtn" onclick="startGen()" disabled>Generate Video</button>
         </div>
 
-        <!-- Step 2 -->
+        <!-- STEP 2 -->
         <div class="step" id="step2">
             <div class="generating">
                 <div class="spinner"></div>
                 <h3>Creating Your Video...</h3>
-                <p id="genStatus">Initializing</p>
+                <p id="statusText">Starting</p>
                 <div class="progress-bar">
-                    <div class="progress-fill" id="genProgress"></div>
+                    <div class="progress-fill" id="progBar"></div>
                 </div>
-                <p class="status-text" id="genDetail">Preparing assets...</p>
             </div>
         </div>
 
-        <!-- Step 3 -->
+        <!-- STEP 3 -->
         <div class="step" id="step3">
-            <button class="back-btn" onclick="goToStep(1)">← Back</button>
-            
-            <div class="video-container">
-                <video id="outputVideo" controls style="max-height:400px;width:100%;"></video>
-                <div class="video-fallback hidden" id="videoFallback">
-                    <p>⚠️ Video playback not supported</p>
-                    <button onclick="downloadVideo()">Download Video Instead</button>
+            <div class="video-result">
+                <div class="video-box">
+                    <video id="previewVideo" controls autoplay muted playsinline></video>
+                    <div class="video-fallback hidden" id="vidFallback">
+                        <p>⚠️ Video preview not available</p>
+                        <button class="btn btn-primary" onclick="downloadVid()">Download Video</button>
+                    </div>
                 </div>
-                
-                <div class="video-overlay">
-                    <span class="video-badge">TikTok</span>
-                    <span class="video-audio-badge" id="vidAudioBadge">🎵 Music</span>
-                </div>
-                <div class="video-caption" id="vidCaption">Your caption</div>
-            </div>
 
-            <div class="video-info">
-                <h4>🎬 Video Info</h4>
-                <div class="video-specs">
-                    <span>📐 540x960 (9:16)</span>
-                    <span>⏱️ 10 seconds</span>
-                    <span>📁 WebM format</span>
-                    <span id="vidAudioType">🎵 Background Music</span>
+                <div class="video-info-box">
+                    <strong>🎬 Video Details:</strong><br>
+                    📐 Resolution: 540x960 (9:16 TikTok format)<br>
+                    ⏱️ Duration: 10 seconds<br>
+                    📁 Format: WebM video<br>
+                    <span id="audDetail">🎵 Audio: Background Music</span>
                 </div>
-            </div>
 
-            <div class="action-buttons">
-                <button class="btn btn-primary" onclick="goToStep(4)">Post →</button>
-                <button class="btn btn-secondary" onclick="downloadVideo()">⬇ Download</button>
+                <div style="display:flex;gap:10px;">
+                    <button class="btn btn-primary" onclick="goStep(4)">Post to TikTok →</button>
+                    <button class="btn btn-secondary" onclick="downloadVid()">⬇ Download</button>
+                </div>
+                <button class="btn btn-secondary" onclick="goStep(1)" style="margin-top:10px;">🔄 Create New Video</button>
             </div>
         </div>
 
-        <!-- Step 4 -->
+        <!-- STEP 4 -->
         <div class="step" id="step4">
-            <button class="back-btn" onclick="goToStep(3)">← Back</button>
-            <div id="postMsg" class="message"></div>
-
-            <div id="loginSection" class="auth-section">
-                <p>Connect to TikTok to post</p>
-                <button class="btn btn-primary" onclick="connectTT()">Connect TikTok</button>
+            <div id="msgBox" class="message hidden"></div>
+            
+            <div id="loginBox" style="text-align:center;padding:30px;">
+                <p>Connect your TikTok account to post</p>
+                <button class="btn btn-primary" onclick="doLogin()">Connect TikTok</button>
             </div>
 
-            <div id="postSection" class="hidden">
-                <div class="connected-account">
-                    <div class="account-avatar">👤</div>
-                    <div class="account-info">
-                        <h4>@creator</h4>
-                        <p>✓ Connected</p>
-                    </div>
-                    <button class="back-btn" onclick="disconnectTT()">Switch</button>
+            <div id="postBox" class="hidden">
+                <div style="background:#f0f9ff;border:2px solid #0ea5e9;border-radius:10px;padding:15px;margin-bottom:15px;">
+                    <div style="font-weight:600;">@creator</div>
+                    <div style="color:#0ea5e9;font-size:12px;">✓ Connected to TikTok</div>
                 </div>
 
-                <div class="post-options">
-                    <div class="option-group">
-                        <label>Caption</label>
-                        <textarea id="finalCaption" placeholder="Write caption..."></textarea>
-                        <div class="hashtag-suggestions" id="finalHashtags"></div>
-                    </div>
-                    <div class="option-group">
-                        <label>Privacy</label>
-                        <select id="privacy">
-                            <option value="public">🌎 Public</option>
-                            <option value="friends">👥 Friends</option>
-                            <option value="private">🔒 Private</option>
-                        </select>
-                    </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:6px;font-weight:600;font-size:13px;">Caption</label>
+                    <textarea id="capText" style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:6px;min-height:80px;font-size:13px;"></textarea>
+                    <div id="hashList" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
                 </div>
 
-                <button class="btn btn-primary" onclick="postVideo()">📤 Post to TikTok</button>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:6px;font-weight:600;font-size:13px;">Privacy</label>
+                    <select id="privSet" style="width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:6px;">
+                        <option value="public">🌎 Public - Everyone can see</option>
+                        <option value="friends">👥 Friends - Followers only</option>
+                        <option value="private">🔒 Private - Only you</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" onclick="doPost()">📤 Post to TikTok</button>
             </div>
         </div>
 
@@ -900,114 +562,115 @@
     </div>
 
     <script>
-        // Data
+        // DATA
         const topics = [
-            { icon: '💡', title: 'Productivity Hacks', tags: ['#productivity','#hacks'], captions: ['3 Hacks','Save Time','Be Efficient'] },
-            { icon: '💪', title: 'Quick Workout', tags: ['#fitness','#workout'], captions: ['5 Min Workout','No Equipment','Get Fit'] },
-            { icon: '🍳', title: 'Easy Recipes', tags: ['#cooking','#food'], captions: ['3 Ingredients','Quick Meal','Delicious'] },
-            { icon: '💰', title: 'Save Money', tags: ['#money','#finance'], captions: ['Save $500','Simple Tips','Start Today'] },
-            { icon: '🧠', title: 'Psychology Facts', tags: ['#psychology','#facts'], captions: ['Brain Tricks','Mind Blown','True Story'] },
-            { icon: '🎨', title: 'DIY Decor', tags: ['#diy','#decor'], captions: ['Under $50','Easy DIY','Transform'] }
+            { icon: '💡', title: 'Productivity Hacks', tags: ['#productivity','#hacks','#tips'], captions: ['3 Productivity Hacks','Save Hours Daily','Work Smarter'] },
+            { icon: '💪', title: 'Quick Workout', tags: ['#fitness','#workout','#health'], captions: ['5 Minute Workout','No Equipment Needed','Get Fit Fast'] },
+            { icon: '🍳', title: 'Easy Recipes', tags: ['#cooking','#food','#recipe'], captions: ['3 Ingredient Recipe','Ready in 10 Minutes','So Delicious'] },
+            { icon: '💰', title: 'Save Money', tags: ['#money','#finance','#save'], captions: ['Save $500 Monthly','Simple Money Tips','Start Today'] },
+            { icon: '🧠', title: 'Psychology Facts', tags: ['#psychology','#facts','#mind'], captions: ['Your Brain Lies','Mind-Blowing Facts','So True!'] },
+            { icon: '🎨', title: 'DIY Home Decor', tags: ['#diy','#decor','#home'], captions: ['Under $50 Makeover','Easy DIY Projects','Looks Amazing'] }
         ];
 
-        const allTracks = [
-            { name: 'Trending Pop', artist: 'TikTok', cat: 'Trending', color: '#FF6B6B' },
-            { name: 'Viral Beat', artist: 'Social', cat: 'Trending', color: '#FCBAD3' },
-            { name: 'Upbeat Energy', artist: 'Beats', cat: 'Upbeat', color: '#4ECDC4' },
-            { name: 'High Energy', artist: 'Music', cat: 'Upbeat', color: '#45B7D1' },
-            { name: 'Lo-Fi Chill', artist: 'Study', cat: 'Chill', color: '#95E1D3' },
-            { name: 'Morning Coffee', artist: 'Acoustic', cat: 'Chill', color: '#A8D8EA' },
-            { name: 'Smooth R&B', artist: 'Soul', cat: 'R&B', color: '#8B5CF6' },
-            { name: 'Late Night R&B', artist: 'Midnight', cat: 'R&B', color: '#A78BFA' },
-            { name: 'R&B Love', artist: 'Heart', cat: 'R&B', color: '#C4B5FD' },
-            { name: 'Neo Soul', artist: 'Urban', cat: 'R&B', color: '#7C3AED' },
-            { name: 'Motivation', artist: 'Inspire', cat: 'Motivational', color: '#F38181' },
-            { name: 'Workout Pump', artist: 'Gym', cat: 'Motivational', color: '#FF8066' }
+        // Each track has unique sound parameters
+        const tracks = [
+            { name: 'Trending Pop 2024', artist: 'TikTok', cat: 'Trending', color: '#FF6B6B', sound: 'pop' },
+            { name: 'Viral Dance Beat', artist: 'Social', cat: 'Trending', color: '#FCBAD3', sound: 'dance' },
+            { name: 'Upbeat Energy', artist: 'Beats', cat: 'Upbeat', color: '#4ECDC4', sound: 'energy' },
+            { name: 'High Tempo', artist: 'Music', cat: 'Upbeat', color: '#45B7D1', sound: 'fast' },
+            { name: 'Lo-Fi Study', artist: 'Chill', cat: 'Chill', color: '#95E1D3', sound: 'lofi' },
+            { name: 'Morning Coffee', artist: 'Acoustic', cat: 'Chill', color: '#A8D8EA', sound: 'calm' },
+            { name: 'Smooth R&B', artist: 'Soul', cat: 'R&B', color: '#8B5CF6', sound: 'rnb' },
+            { name: 'Late Night R&B', artist: 'Midnight', cat: 'R&B', color: '#A78BFA', sound: 'soul' },
+            { name: 'R&B Love Song', artist: 'Heart', cat: 'R&B', color: '#C4B5FD', sound: 'love' },
+            { name: 'Neo Soul', artist: 'Urban', cat: 'R&B', color: '#7C3AED', sound: 'neosoul' },
+            { name: 'Motivational', artist: 'Inspire', cat: 'Motivational', color: '#F38181', sound: 'epic' },
+            { name: 'Workout Pump', artist: 'Gym', cat: 'Motivational', color: '#FF8066', sound: 'pump' }
         ];
 
-        // State
-        let selectedTopic = null;
+        // STATE
+        let selTopic = null;
         let audioType = 'music';
-        let selectedTrack = allTracks[6]; // Default R&B
-        let selectedVoice = 'nova';
+        let selTrack = tracks[6]; // Default R&B
+        let selVoice = 'nova';
         let videoBlob = null;
         let audioCtx = null;
         let currentOsc = null;
+        let currentGain = null;
 
-        // Init
+        // INIT
         function init() {
             renderTopics();
             renderTracks('Trending');
             
             // Volume listeners
-            document.getElementById('musicVol').oninput = function() {
-                document.getElementById('musicVolDisplay').textContent = this.value + '%';
+            document.getElementById('mVol').oninput = function() {
+                document.getElementById('mVolDisp').textContent = this.value + '%';
             };
-            document.getElementById('voiceVol').oninput = function() {
-                document.getElementById('voiceVolDisplay').textContent = this.value + '%';
+            document.getElementById('vVol').oninput = function() {
+                document.getElementById('vVolDisp').textContent = this.value + '%';
             };
             
-            // Topic input
+            // Input listener
             document.getElementById('topicInput').oninput = function() {
                 if (this.value) {
-                    selectedTopic = null;
+                    selTopic = null;
                     document.querySelectorAll('.suggestion-card').forEach(c => c.classList.remove('selected'));
                 }
-                checkCanGenerate();
+                checkEnable();
             };
         }
 
         function renderTopics() {
-            const container = document.getElementById('topicList');
-            container.innerHTML = topics.map((t, i) => `
+            const box = document.getElementById('topicsList');
+            box.innerHTML = topics.map((t, i) => `
                 <div class="suggestion-card" onclick="pickTopic(${i})">
                     <div class="suggestion-icon">${t.icon}</div>
-                    <div class="suggestion-content">
-                        <h4>${t.title}</h4>
-                        <p>${t.tags.join(' ')}</p>
+                    <div>
+                        <div style="font-weight:600;">${t.title}</div>
+                        <div style="font-size:12px;color:#666;">${t.tags.join(' ')}</div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function pickTopic(idx) {
-            selectedTopic = topics[idx];
-            document.querySelectorAll('.suggestion-card').forEach((c, i) => {
-                c.classList.toggle('selected', i === idx);
+        function pickTopic(i) {
+            selTopic = topics[i];
+            document.querySelectorAll('.suggestion-card').forEach((c, idx) => {
+                c.classList.toggle('selected', idx === i);
             });
-            document.getElementById('topicInput').value = selectedTopic.title;
-            checkCanGenerate();
+            document.getElementById('topicInput').value = selTopic.title;
+            checkEnable();
         }
 
-        function checkCanGenerate() {
-            const hasTopic = selectedTopic || document.getElementById('topicInput').value.trim();
-            document.getElementById('genBtn').disabled = !hasTopic;
+        function checkEnable() {
+            const has = selTopic || document.getElementById('topicInput').value.trim();
+            document.getElementById('startBtn').disabled = !has;
         }
 
-        function renderTracks(category) {
-            const filtered = allTracks.filter(t => t.cat === category);
-            const container = document.getElementById('trackList');
-            
-            container.innerHTML = filtered.map(t => `
-                <div class="music-track ${t.name === selectedTrack.name ? 'selected' : ''}" onclick="pickTrack('${t.name}')">
-                    <button class="preview-btn" onclick="previewTrack(event, '${t.name}')">▶</button>
-                    <div class="track-info">
-                        <div class="track-name">${t.name}</div>
-                        <div class="track-artist">${t.artist}</div>
+        function renderTracks(cat) {
+            const list = tracks.filter(t => t.cat === cat);
+            const box = document.getElementById('tracksList');
+            box.innerHTML = list.map(t => `
+                <div class="music-track ${t.name === selTrack.name ? 'selected' : ''}" onclick="pickTrack('${t.name}')">
+                    <button class="preview-btn" onclick="playTrack(event, '${t.name}')">▶</button>
+                    <div style="flex:1;">
+                        <div style="font-weight:600;">${t.name}</div>
+                        <div style="font-size:11px;color:#666;">${t.artist}</div>
                     </div>
                     <span class="track-badge" style="background:${t.color}">${t.cat}</span>
                 </div>
             `).join('');
         }
 
-        function filterMusic(cat, el) {
+        function filterCat(cat, el) {
             document.querySelectorAll('.music-category').forEach(c => c.classList.remove('active'));
             el.classList.add('active');
             renderTracks(cat);
         }
 
         function pickTrack(name) {
-            selectedTrack = allTracks.find(t => t.name === name);
+            selTrack = tracks.find(t => t.name === name);
             renderTracks(document.querySelector('.music-category.active').textContent);
         }
 
@@ -1020,130 +683,272 @@
             }
         }
 
-        function previewTrack(e, name) {
+        // UNIQUE SOUNDS FOR EACH GENRE
+        function playTrack(e, name) {
             e.stopPropagation();
             initAudio();
             
-            const track = allTracks.find(t => t.name === name);
+            const track = tracks.find(t => t.name === name);
             const btn = e.target;
             
-            // Stop current
-            if (currentOsc) {
-                try { currentOsc.stop(); } catch(e) {}
-                currentOsc = null;
-                document.querySelectorAll('.preview-btn').forEach(b => {
-                    b.textContent = '▶';
-                    b.classList.remove('playing');
-                });
-                if (btn.textContent === '⏸') {
-                    btn.textContent = '▶';
-                    return;
-                }
+            // Stop any playing sound
+            stopAllSounds();
+            
+            if (btn.classList.contains('playing')) {
+                btn.classList.remove('playing');
+                return;
             }
             
-            // Create synth sound based on category
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
+            // Create unique sound based on track type
+            const now = audioCtx.currentTime;
             
-            // Different sounds for different categories
-            if (track.cat === 'R&B') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
-                osc.frequency.exponentialRampToValueAtTime(330, audioCtx.currentTime + 0.5); // E4
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
-            } else if (track.cat === 'Upbeat') {
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(554, audioCtx.currentTime + 0.2); // C#5
-                osc.frequency.setValueAtTime(659, audioCtx.currentTime + 0.4); // E5
-                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
-            } else {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(330, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
+            switch(track.sound) {
+                case 'rnb':
+                case 'soul':
+                case 'love':
+                case 'neosoul':
+                    // Smooth R&B - sine waves with slide
+                    playRNB(now);
+                    break;
+                case 'pop':
+                case 'dance':
+                    // Pop/Dance - bouncy square wave
+                    playPop(now);
+                    break;
+                case 'energy':
+                case 'fast':
+                case 'pump':
+                    // High energy - fast arpeggio
+                    playEnergy(now);
+                    break;
+                case 'lofi':
+                case 'calm':
+                    // Chill - soft triangle
+                    playChill(now);
+                    break;
+                case 'epic':
+                    // Motivational - dramatic
+                    playEpic(now);
+                    break;
+                default:
+                    playDefault(now);
             }
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 2);
-            
-            currentOsc = osc;
             
             // Visual feedback
-            btn.textContent = '⏸';
             btn.classList.add('playing');
             setTimeout(() => {
-                btn.textContent = '▶';
                 btn.classList.remove('playing');
             }, 2000);
         }
 
-        function setAudioType(type) {
-            audioType = type;
-            document.querySelectorAll('.audio-type-btn').forEach(b => {
-                b.classList.toggle('selected', b.textContent.toLowerCase().includes(type === 'both' ? 'both' : type === 'music' ? 'music' : 'voice'));
-            });
-            
-            document.getElementById('musicSection').classList.toggle('hidden', type === 'voice');
-            document.getElementById('voiceSection').classList.toggle('hidden', type === 'music');
+        function stopAllSounds() {
+            if (currentOsc) {
+                try { currentOsc.stop(); } catch(e) {}
+                currentOsc = null;
+            }
+            if (currentGain) {
+                try { currentGain.disconnect(); } catch(e) {}
+            }
+            document.querySelectorAll('.preview-btn').forEach(b => b.classList.remove('playing'));
         }
 
-        function selectVoice(voice, el) {
-            selectedVoice = voice;
+        function playRNB(now) {
+            // Smooth soulful sound
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(220, now); // A3
+            osc.frequency.exponentialRampToValueAtTime(293.66, now + 0.4); // D4
+            osc.frequency.exponentialRampToValueAtTime(220, now + 0.8); // Back to A3
+            
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.4, now + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 2);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 2);
+            
+            currentOsc = osc;
+            currentGain = gain;
+        }
+
+        function playPop(now) {
+            // Bouncy pop sound
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(440, now); // A4
+            osc.frequency.setValueAtTime(554.37, now + 0.15); // C#5
+            osc.frequency.setValueAtTime(659.25, now + 0.3); // E5
+            osc.frequency.setValueAtTime(440, now + 0.45); // Back to A4
+            
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.25, now + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 1.5);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 1.5);
+            
+            currentOsc = osc;
+            currentGain = gain;
+        }
+
+        function playEnergy(now) {
+            // Fast energetic arpeggio
+            const notes = [440, 554, 659, 880]; // A4, C#5, E5, A5
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.15, now + i * 0.12);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.12 + 0.15);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now + i * 0.12);
+                osc.stop(now + i * 0.12 + 0.15);
+            });
+        }
+
+        function playChill(now) {
+            // Soft chill sound
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(330, now); // E4
+            osc.frequency.linearRampToValueAtTime(392, now + 1.5); // G4
+            
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.3, now + 0.2);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 2);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 2);
+            
+            currentOsc = osc;
+            currentGain = gain;
+        }
+
+        function playEpic(now) {
+            // Dramatic motivational
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(220, now);
+            osc.frequency.exponentialRampToValueAtTime(440, now + 0.5);
+            
+            gain.gain.setValueAtTime(0.2, now);
+            gain.gain.linearRampToValueAtTime(0.4, now + 0.3);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 2);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 2);
+            
+            currentOsc = osc;
+            currentGain = gain;
+        }
+
+        function playDefault(now) {
+            playChill(now);
+        }
+
+        function setType(type) {
+            audioType = type;
+            document.querySelectorAll('.audio-type-btn').forEach(b => {
+                b.classList.toggle('selected', 
+                    (type === 'music' && b.textContent.includes('Music')) ||
+                    (type === 'voice' && b.textContent.includes('Voice')) ||
+                    (type === 'both' && b.textContent.includes('Both'))
+                );
+            });
+            document.getElementById('musicBox').classList.toggle('hidden', type === 'voice');
+            document.getElementById('voiceBox').classList.toggle('hidden', type === 'music');
+        }
+
+        function setVoice(voice, el) {
+            selVoice = voice;
             document.querySelectorAll('.voice-option').forEach(o => o.classList.remove('selected'));
             el.classList.add('selected');
         }
 
         function testVoice() {
-            const text = document.getElementById('voiceText').value || 'This is a voice preview test';
+            const text = document.getElementById('vScript').value || 'This is a preview of your selected voice';
             
             if (!window.speechSynthesis) {
-                alert('Voice not supported in this browser');
+                alert('Voice preview not supported in your browser');
                 return;
             }
             
             window.speechSynthesis.cancel();
             
             const u = new SpeechSynthesisUtterance(text);
-            u.rate = selectedVoice === 'shimmer' ? 1.15 : selectedVoice === 'echo' ? 0.9 : 1;
-            u.pitch = selectedVoice === 'nova' ? 1.1 : selectedVoice === 'shimmer' ? 1.2 : 1;
+            
+            // Voice characteristics
+            switch(selVoice) {
+                case 'nova':
+                    u.pitch = 1.1;
+                    u.rate = 1;
+                    break;
+                case 'echo':
+                    u.pitch = 0.9;
+                    u.rate = 0.9;
+                    break;
+                case 'shimmer':
+                    u.pitch = 1.25;
+                    u.rate = 1.15;
+                    break;
+                default: // alloy
+                    u.pitch = 1;
+                    u.rate = 1;
+            }
             
             window.speechSynthesis.speak(u);
         }
 
-        async function generate() {
-            if (!selectedTopic) {
-                const title = document.getElementById('topicInput').value.trim();
-                selectedTopic = { title, captions: [title, 'Amazing!', 'Follow'], tags: ['#fyp','#viral'] };
+        async function startGen() {
+            if (!selTopic) {
+                const t = document.getElementById('topicInput').value.trim();
+                selTopic = { 
+                    title: t, 
+                    captions: [t, 'Amazing content!', 'Follow for more'], 
+                    tags: ['#fyp','#viral','#trending'] 
+                };
             }
             
-            goToStep(2);
+            goStep(2);
             
             // Progress animation
             const steps = [
-                { p: 15, s: 'Creating canvas...', d: 'Setting up 540x960' },
-                { p: 35, s: 'Drawing frames...', d: 'Adding animations' },
-                { p: 55, s: audioType !== 'voice' ? `Adding ${selectedTrack.name}...` : 'Adding voice...', d: 'Audio layer' },
-                { p: 75, s: 'Encoding video...', d: 'WebM format' },
-                { p: 100, s: 'Done!', d: 'Ready to play' }
+                { p: 20, t: 'Creating video canvas...' },
+                { p: 40, t: audioType !== 'voice' ? `Adding ${selTrack.name}...` : 'Preparing voiceover...' },
+                { p: 60, t: 'Rendering animation frames...' },
+                { p: 80, t: 'Encoding video file...' },
+                { p: 100, t: 'Video ready!' }
             ];
             
             for (let i = 0; i < steps.length; i++) {
-                await new Promise(r => setTimeout(r, 600));
-                document.getElementById('genProgress').style.width = steps[i].p + '%';
-                document.getElementById('genStatus').textContent = steps[i].s;
-                document.getElementById('genDetail').textContent = steps[i].d;
+                await new Promise(r => setTimeout(r, 700));
+                document.getElementById('progBar').style.width = steps[i].p + '%';
+                document.getElementById('statusText').textContent = steps[i].t;
             }
             
-            // Actually create the video
-            await createRealVideo();
+            // Create video
+            await createVideo();
         }
 
-        async function createRealVideo() {
+        async function createVideo() {
             return new Promise((resolve) => {
                 const canvas = document.createElement('canvas');
                 canvas.width = 540;
@@ -1152,40 +957,51 @@
                 
                 const stream = canvas.captureStream(30);
                 const recorder = new MediaRecorder(stream, { 
-                    mimeType: 'video/webm;codecs=vp9',
-                    videoBitsPerSecond: 2500000
+                    mimeType: 'video/webm;codecs=vp8',
+                    videoBitsPerPerSecond: 2500000
                 });
                 
                 const chunks = [];
-                recorder.ondataavailable = e => chunks.push(e.data);
+                
+                recorder.ondataavailable = e => {
+                    if (e.data && e.data.size > 0) chunks.push(e.data);
+                };
+                
                 recorder.onstop = () => {
+                    if (chunks.length === 0) {
+                        showCanvasFallback(canvas, ctx);
+                        resolve();
+                        return;
+                    }
+                    
                     videoBlob = new Blob(chunks, { type: 'video/webm' });
                     const url = URL.createObjectURL(videoBlob);
                     
-                    const video = document.getElementById('outputVideo');
-                    video.src = url;
-                    video.load();
+                    const vid = document.getElementById('previewVideo');
+                    vid.src = url;
                     
-                    goToStep(3);
-                    updatePreviewInfo();
+                    goStep(3);
+                    updateInfo();
                     
-                    // Auto-play after short delay
-                    setTimeout(() => {
-                        video.play().catch(e => {
-                            console.log('Autoplay blocked:', e);
-                            // Show controls if autoplay fails
-                            video.controls = true;
-                        });
-                    }, 500);
+                    // Try autoplay
+                    vid.play().catch(() => {
+                        vid.muted = true;
+                        vid.play();
+                    });
                     
+                    resolve();
+                };
+                
+                recorder.onerror = () => {
+                    showCanvasFallback(canvas, ctx);
                     resolve();
                 };
                 
                 // Record for 10 seconds
                 let frame = 0;
-                const totalFrames = 300; // 10s @ 30fps
+                const totalFrames = 300;
                 
-                recorder.start(100); // Collect data every 100ms
+                recorder.start(100);
                 
                 function draw() {
                     if (frame >= totalFrames) {
@@ -1193,61 +1009,62 @@
                         return;
                     }
                     
-                    // Clear
-                    ctx.fillStyle = '#1a1a2e';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    
-                    // Animated background
+                    // Background gradient animation
                     const hue = (frame / totalFrames) * 360;
-                    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-                    grad.addColorStop(0, `hsl(${hue}, 50%, 20%)`);
-                    grad.addColorStop(1, `hsl(${(hue + 60) % 360}, 50%, 10%)`);
+                    const grad = ctx.createLinearGradient(0, 0, 0, 960);
+                    grad.addColorStop(0, `hsl(${hue}, 55%, 20%)`);
+                    grad.addColorStop(1, `hsl(${(hue + 60) % 360}, 55%, 12%)`);
                     ctx.fillStyle = grad;
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillRect(0, 0, 540, 960);
                     
-                    // Rotating element
+                    // Animated rotating shape
                     ctx.save();
-                    ctx.translate(canvas.width/2, canvas.height/3);
-                    ctx.rotate(frame * 0.03);
-                    ctx.fillStyle = selectedTrack.color;
+                    ctx.translate(270, 300);
+                    ctx.rotate(frame * 0.04);
+                    ctx.fillStyle = selTrack.color;
                     ctx.globalAlpha = 0.6;
-                    ctx.fillRect(-50, -50, 100, 100);
+                    ctx.beginPath();
+                    ctx.moveTo(0, -70);
+                    ctx.lineTo(60, 35);
+                    ctx.lineTo(-60, 35);
+                    ctx.closePath();
+                    ctx.fill();
                     ctx.restore();
                     
                     // Icon
                     ctx.globalAlpha = 1;
-                    ctx.font = '60px Arial';
+                    ctx.font = '70px Arial';
                     ctx.textAlign = 'center';
                     ctx.fillStyle = 'white';
-                    ctx.fillText(selectedTopic.icon, canvas.width/2, canvas.height/3 + 20);
+                    ctx.fillText(selTopic.icon, 270, 320);
                     
                     // Title
-                    ctx.font = 'bold 24px Arial';
+                    ctx.font = 'bold 26px Arial';
                     ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                    ctx.shadowBlur = 10;
-                    ctx.fillText(selectedTopic.title, canvas.width/2, canvas.height/2);
+                    ctx.shadowBlur = 8;
+                    ctx.fillText(selTopic.title, 270, 470);
                     ctx.shadowBlur = 0;
                     
-                    // Caption that changes
-                    const capIdx = Math.floor((frame / totalFrames) * selectedTopic.captions.length);
-                    const caption = selectedTopic.captions[capIdx] || selectedTopic.captions[0];
+                    // Rotating captions
+                    const capIndex = Math.floor((frame / totalFrames) * selTopic.captions.length);
+                    const caption = selTopic.captions[capIndex] || selTopic.captions[0];
                     
                     ctx.fillStyle = '#FE2C55';
-                    ctx.fillRect(50, canvas.height - 120, canvas.width - 100, 40);
-                    ctx.font = 'bold 16px Arial';
+                    ctx.fillRect(40, 780, 460, 45);
+                    ctx.font = 'bold 20px Arial';
                     ctx.fillStyle = 'white';
-                    ctx.fillText(caption, canvas.width/2, canvas.height - 95);
+                    ctx.fillText(caption, 270, 808);
                     
                     // Progress bar
-                    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-                    ctx.fillRect(50, canvas.height - 50, canvas.width - 100, 6);
+                    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+                    ctx.fillRect(40, 910, 460, 6);
                     ctx.fillStyle = '#FE2C55';
-                    ctx.fillRect(50, canvas.height - 50, (canvas.width - 100) * (frame / totalFrames), 6);
+                    ctx.fillRect(40, 910, 460 * (frame / totalFrames), 6);
                     
                     // Watermark
                     ctx.font = '14px Arial';
                     ctx.fillStyle = 'rgba(255,255,255,0.5)';
-                    ctx.fillText('@tiktok-generator', 20, 30);
+                    ctx.fillText('@tiktok-generator', 15, 30);
                     
                     frame++;
                     requestAnimationFrame(draw);
@@ -1257,113 +1074,80 @@
             });
         }
 
-        function updatePreviewInfo() {
-            const audioBadge = document.getElementById('vidAudioBadge');
-            const audioType = document.getElementById('vidAudioType');
-            const caption = document.getElementById('vidCaption');
+        function showCanvasFallback(canvas, ctx) {
+            // Show live canvas animation as fallback
+            const vid = document.getElementById('previewVideo');
+            vid.style.display = 'none';
+            document.getElementById('vidFallback').classList.remove('hidden');
             
+            // Still create a downloadable image sequence
+            canvas.toBlob(b => {
+                videoBlob = b;
+            });
+        }
+
+        function updateInfo() {
+            const aud = document.getElementById('audDetail');
             if (audioType === 'music') {
-                audioBadge.textContent = '🎵 ' + selectedTrack.name;
-                audioType.textContent = '🎵 ' + selectedTrack.name;
+                aud.textContent = '🎵 Audio: ' + selTrack.name + ' (' + selTrack.cat + ')';
             } else if (audioType === 'voice') {
-                audioBadge.textContent = '🎙️ Voice';
-                audioType.textContent = '🎙️ AI Voiceover';
+                aud.textContent = '🎙️ Audio: AI Voiceover (' + selVoice + ')';
             } else {
-                audioBadge.textContent = '🎵🎙️ Both';
-                audioType.textContent = '🎵🎙️ Music + Voice';
+                aud.textContent = '🎵🎙️ Audio: ' + selTrack.name + ' + ' + selVoice + ' voice';
             }
             
-            caption.textContent = selectedTopic.captions[0];
-            
-            // Setup hashtags
-            const hashtagDiv = document.getElementById('finalHashtags');
-            hashtagDiv.innerHTML = selectedTopic.tags.map(t => 
-                `<span class="hashtag-tag" onclick="addTag('${t}')">${t}</span>`
+            // Setup post screen
+            document.getElementById('capText').value = selTopic.captions[0] + '\n\n' + selTopic.tags.join(' ');
+            document.getElementById('hashList').innerHTML = selTopic.tags.map(t => 
+                `<span onclick="addHash('${t}')" style="background:#e3f2fd;color:#1976d2;padding:4px 10px;border-radius:15px;font-size:11px;cursor:pointer;">${t}</span>`
             ).join('');
-            
-            document.getElementById('finalCaption').value = 
-                selectedTopic.captions[0] + '\n\n' + selectedTopic.tags.join(' ');
         }
 
-        function addTag(tag) {
-            const cap = document.getElementById('finalCaption');
-            cap.value += ' ' + tag;
+        function addHash(t) {
+            document.getElementById('capText').value += ' ' + t;
         }
 
-        function toggleVideo() {
-            const v = document.getElementById('outputVideo');
-            if (v.paused) v.play();
-            else v.pause();
-        }
-
-        function seekVideo(e) {
-            const v = document.getElementById('outputVideo');
-            const rect = e.target.getBoundingClientRect();
-            v.currentTime = (e.clientX - rect.left) / rect.width * v.duration;
-        }
-
-        // Update progress bar
-        setInterval(() => {
-            const v = document.getElementById('outputVideo');
-            if (v.duration) {
-                const pct = (v.currentTime / v.duration) * 100;
-                document.querySelector('.video-progress-fill').style.width = pct + '%';
-                document.querySelector('.video-time').textContent = 
-                    formatTime(v.currentTime) + ' / ' + formatTime(v.duration);
+        function downloadVid() {
+            if (!videoBlob) {
+                alert('No video available');
+                return;
             }
-        }, 100);
-
-        function formatTime(s) {
-            if (!s || isNaN(s)) return '0:00';
-            const m = Math.floor(s / 60);
-            const sec = Math.floor(s % 60);
-            return m + ':' + sec.toString().padStart(2, '0');
-        }
-
-        function downloadVideo() {
-            if (!videoBlob) return alert('No video to download');
             const a = document.createElement('a');
             a.href = URL.createObjectURL(videoBlob);
             a.download = `tiktok-${Date.now()}.webm`;
             a.click();
         }
 
-        function connectTT() {
-            document.getElementById('postMsg').className = 'message success';
-            document.getElementById('postMsg').textContent = 'Connecting...';
-            document.getElementById('postMsg').style.display = 'block';
+        function doLogin() {
+            document.getElementById('msgBox').className = 'message success';
+            document.getElementById('msgBox').textContent = 'Connecting to TikTok...';
+            document.getElementById('msgBox').classList.remove('hidden');
             
             setTimeout(() => {
-                document.getElementById('loginSection').classList.add('hidden');
-                document.getElementById('postSection').classList.remove('hidden');
-                document.getElementById('postMsg').style.display = 'none';
+                document.getElementById('loginBox').classList.add('hidden');
+                document.getElementById('postBox').classList.remove('hidden');
+                document.getElementById('msgBox').classList.add('hidden');
             }, 1500);
         }
 
-        function disconnectTT() {
-            document.getElementById('loginSection').classList.remove('hidden');
-            document.getElementById('postSection').classList.add('hidden');
-        }
-
-        function postVideo() {
-            const btn = document.querySelector('#step4 .btn-primary');
+        function doPost() {
+            const btn = document.querySelector('#postBox .btn-primary');
             btn.disabled = true;
             btn.textContent = 'Posting...';
             
             setTimeout(() => {
-                document.getElementById('postMsg').className = 'message success';
-                document.getElementById('postMsg').textContent = '✅ Posted to TikTok!';
-                document.getElementById('postMsg').style.display = 'block';
+                document.getElementById('msgBox').className = 'message success';
+                document.getElementById('msgBox').textContent = '✅ Successfully posted to TikTok!';
+                document.getElementById('msgBox').classList.remove('hidden');
                 btn.disabled = false;
                 btn.textContent = '📤 Post to TikTok';
             }, 2000);
         }
 
-        function goToStep(n) {
-            currentStep = n;
+        function goStep(n) {
             document.querySelectorAll('.step').forEach((s, i) => s.classList.toggle('active', i + 1 === n));
             document.querySelectorAll('.nav-dot').forEach((d, i) => d.classList.toggle('active', i + 1 === n));
-            document.getElementById('currentStep').textContent = n;
+            document.getElementById('stepNum').textContent = n;
         }
 
         // Start
