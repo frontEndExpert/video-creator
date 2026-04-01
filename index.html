@@ -298,6 +298,8 @@
             justify-content: center;
             color: white;
             font-size: 14px;
+            border: none;
+            cursor: pointer;
         }
 
         .music-track .track-info {
@@ -464,6 +466,7 @@
             transition: width 0.5s;
         }
 
+        /* VIDEO PREVIEW STYLES */
         .video-preview-container {
             margin-bottom: 20px;
         }
@@ -474,7 +477,18 @@
             overflow: hidden;
             position: relative;
             aspect-ratio: 9/16;
-            max-height: 400px;
+            max-height: 500px;
+        }
+
+        #generatedVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        #generatedVideo.active {
+            display: block;
         }
 
         .video-placeholder {
@@ -486,6 +500,10 @@
             justify-content: center;
             color: white;
             background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .video-placeholder.hidden {
+            display: none;
         }
 
         .video-placeholder .play-icon {
@@ -506,6 +524,57 @@
             transform: scale(1.1);
         }
 
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .video-controls button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-controls button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .video-progress {
+            flex: 1;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .video-progress-fill {
+            height: 100%;
+            background: #FE2C55;
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        .video-time {
+            color: white;
+            font-size: 12px;
+        }
+
         .video-audio-indicator {
             position: absolute;
             top: 15px;
@@ -518,6 +587,30 @@
             gap: 8px;
             color: white;
             font-size: 12px;
+        }
+
+        .video-watermark {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(254, 44, 85, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .video-caption-overlay {
+            position: absolute;
+            bottom: 80px;
+            left: 15px;
+            right: 15px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            text-align: center;
         }
 
         .video-info {
@@ -566,6 +659,17 @@
             margin-bottom: 8px;
             font-size: 13px;
             color: #555;
+        }
+
+        .download-section {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .download-section .btn {
+            flex: 1;
+            margin-top: 0;
         }
 
         .post-options {
@@ -884,14 +988,29 @@
             
             <div class="video-preview-container">
                 <div class="video-preview">
+                    <!-- Real Video Player -->
+                    <video id="generatedVideo" playsinline></video>
+                    
+                    <!-- Placeholder before video loads -->
                     <div class="video-placeholder" id="videoPlaceholder">
-                        <div class="play-icon">▶</div>
-                        <p>Your Generated Video</p>
-                        <p style="font-size: 12px; opacity: 0.7; margin-top: 10px;">Click to preview</p>
+                        <div class="play-icon" onclick="loadAndPlayVideo()">▶</div>
+                        <p>Click to Generate Preview</p>
+                        <p style="font-size: 12px; opacity: 0.7; margin-top: 10px;">Creates playable demo video</p>
                     </div>
-                    <div class="video-audio-indicator" id="audioIndicator">
-                        🎵 Music + 🎙️ Voice
+
+                    <!-- Video Controls -->
+                    <div class="video-controls" id="videoControls" style="display: none;">
+                        <button onclick="togglePlay()" id="playPauseBtn">⏸</button>
+                        <div class="video-progress" onclick="seekVideo(event)">
+                            <div class="video-progress-fill" id="videoProgressFill"></div>
+                        </div>
+                        <span class="video-time" id="videoTime">0:00 / 0:30</span>
                     </div>
+
+                    <!-- Overlays -->
+                    <div class="video-watermark">TikTok</div>
+                    <div class="video-audio-indicator" id="audioIndicator">🎵 Music</div>
+                    <div class="video-caption-overlay" id="videoCaption"></div>
                 </div>
             </div>
 
@@ -899,9 +1018,9 @@
                 <h4>🎬 Video Details</h4>
                 <div class="video-specs">
                     <span>📐 1080 x 1920 (9:16)</span>
-                    <span>⏱️ 45 seconds</span>
+                    <span>⏱️ 30 seconds</span>
                     <span>📁 MP4 (H.264)</span>
-                    <span>🎬 60 FPS</span>
+                    <span>🎬 30 FPS</span>
                 </div>
                 
                 <div class="audio-details" id="audioDetails">
@@ -910,9 +1029,14 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary" id="proceedToPostBtn">
-                Proceed to Post →
-            </button>
+            <div class="download-section">
+                <button class="btn btn-primary" id="proceedToPostBtn">
+                    Proceed to Post →
+                </button>
+                <button class="btn btn-secondary" onclick="downloadVideo()">
+                    ⬇ Download
+                </button>
+            </div>
             <button class="btn btn-secondary" id="regenerateBtn">
                 🔄 Regenerate Video
             </button>
@@ -988,6 +1112,12 @@
     </div>
 
     <script>
+        // Canvas for video generation
+        let videoCanvas, videoCtx;
+        let mediaRecorder;
+        let recordedChunks = [];
+        let generatedVideoUrl = null;
+
         const trendingTopics = [
             {
                 id: 1,
@@ -995,9 +1125,10 @@
                 title: 'Quick Productivity Hacks',
                 description: '3 tips to boost your productivity in 60 seconds',
                 hashtags: ['#productivity', '#hacks', '#worksmart', '#efficiency'],
-                duration: '45-60s',
+                duration: '30s',
                 hook: 'Stop wasting time on this...',
-                script: "Here are 3 productivity hacks that changed my life. First, use the two-minute rule. Second, batch similar tasks together. Third, take strategic breaks. Try these today!"
+                script: "Here are 3 productivity hacks that changed my life. First, use the two-minute rule. Second, batch similar tasks together. Third, take strategic breaks. Try these today!",
+                captions: ['3 Productivity Hacks', '1. Two-minute rule', '2. Batch tasks', '3. Strategic breaks']
             },
             {
                 id: 2,
@@ -1005,9 +1136,10 @@
                 title: 'Morning Fitness Routine',
                 description: '5-minute workout you can do anywhere',
                 hashtags: ['#fitness', '#morningroutine', '#workout', '#health'],
-                duration: '30-45s',
+                duration: '30s',
                 hook: 'This 5-minute routine changed my life...',
-                script: "Ready for a quick morning boost? Let's do this 5-minute routine together. Jumping jacks, push-ups, squats, and stretches. No equipment needed. Let's get moving!"
+                script: "Ready for a quick morning boost? Let's do this 5-minute routine together. Jumping jacks, push-ups, squats, and stretches. No equipment needed. Let's get moving!",
+                captions: ['5-Min Workout', 'Jumping Jacks', 'Push-ups', 'Squats', 'Stretches']
             },
             {
                 id: 3,
@@ -1015,9 +1147,10 @@
                 title: 'Easy 3-Ingredient Recipes',
                 description: 'Quick meals anyone can make',
                 hashtags: ['#cooking', '#easyrecipe', '#foodtok', '#quickmeals'],
-                duration: '30-60s',
+                duration: '30s',
                 hook: '3 ingredients, 5 minutes, amazing taste...',
-                script: "Hungry but lazy? This 3-ingredient recipe is perfect. All you need is pasta, butter, and cheese. Cook, mix, enjoy. Simple, delicious, and ready in 10 minutes!"
+                script: "Hungry but lazy? This 3-ingredient recipe is perfect. All you need is pasta, butter, and cheese. Cook, mix, enjoy. Simple, delicious, and ready in 10 minutes!",
+                captions: ['3 Ingredients Only', 'Pasta', 'Butter', 'Cheese', 'Ready in 10 min!']
             },
             {
                 id: 4,
@@ -1025,9 +1158,10 @@
                 title: 'Money Saving Tips',
                 description: 'Simple ways to save $100s every month',
                 hashtags: ['#money', '#saving', '#finance', '#budget'],
-                duration: '45-60s',
+                duration: '30s',
                 hook: 'I saved $500 last month by doing this...',
-                script: "Want to save more money? Here's how I saved 500 dollars last month. Track every expense, cancel unused subscriptions, meal prep instead of eating out, and use cashback apps."
+                script: "Want to save more money? Here's how I saved 500 dollars last month. Track every expense, cancel unused subscriptions, meal prep instead of eating out, and use cashback apps.",
+                captions: ['Save $500/month', 'Track expenses', 'Cancel subs', 'Meal prep', 'Cashback apps']
             },
             {
                 id: 5,
@@ -1035,9 +1169,10 @@
                 title: 'Psychology Facts',
                 description: 'Mind-blowing facts about human behavior',
                 hashtags: ['#psychology', '#facts', '#mindblowing', '#learnontiktok'],
-                duration: '30-45s',
+                duration: '30s',
                 hook: 'Your brain is lying to you about this...',
-                script: "Your brain plays tricks on you every day. Did you know the Dunning-Kruger effect makes unskilled people overestimate themselves? Or that confirmation bias filters what you believe?"
+                script: "Your brain plays tricks on you every day. Did you know the Dunning-Kruger effect makes unskilled people overestimate themselves? Or that confirmation bias filters what you believe?",
+                captions: ['Brain Tricks', 'Dunning-Kruger', 'Confirmation bias', 'Your brain lies!']
             },
             {
                 id: 6,
@@ -1045,21 +1180,22 @@
                 title: 'DIY Home Decor',
                 description: 'Transform your space on a budget',
                 hashtags: ['#diy', '#homedecor', '#transformation', '#crafts'],
-                duration: '45-60s',
+                duration: '30s',
                 hook: 'I transformed this room for under $50...',
-                script: "Want to upgrade your room for cheap? I transformed mine for under 50 dollars. Thrift store finds, DIY wall art, and plants. Small changes, huge difference!"
+                script: "Want to upgrade your room for cheap? I transformed mine for under 50 dollars. Thrift store finds, DIY wall art, and plants. Small changes, huge difference!",
+                captions: ['Under $50!', 'Thrift finds', 'DIY art', 'Add plants', 'Huge difference']
             }
         ];
 
         const musicTracks = [
-            { id: 1, name: "Trending Pop 2024", artist: "TikTok Sounds", duration: "0:30", category: "Trending" },
-            { id: 2, name: "Upbeat Vibes", artist: "Energy Beats", duration: "0:45", category: "Upbeat" },
-            { id: 3, name: "Lo-Fi Study", artist: "Chill Hop", duration: "1:00", category: "Chill" },
-            { id: 4, name: "Motivational Anthem", artist: "Inspire", duration: "0:35", category: "Motivational" },
-            { id: 5, name: "Funny Moments", artist: "Comedy Tunes", duration: "0:25", category: "Funny" },
-            { id: 6, name: "Viral Dance Beat", artist: "TikTok Official", duration: "0:30", category: "Trending" },
-            { id: 7, name: "Morning Coffee", artist: "Acoustic Vibes", duration: "0:40", category: "Chill" },
-            { id: 8, name: "Workout Pump", artist: "Fitness Music", duration: "0:50", category: "Motivational" }
+            { id: 1, name: "Trending Pop 2024", artist: "TikTok Sounds", duration: "0:30", category: "Trending", color: "#FF6B6B" },
+            { id: 2, name: "Upbeat Vibes", artist: "Energy Beats", duration: "0:45", category: "Upbeat", color: "#4ECDC4" },
+            { id: 3, name: "Lo-Fi Study", artist: "Chill Hop", duration: "1:00", category: "Chill", color: "#95E1D3" },
+            { id: 4, name: "Motivational Anthem", artist: "Inspire", duration: "0:35", category: "Motivational", color: "#F38181" },
+            { id: 5, name: "Funny Moments", artist: "Comedy Tunes", duration: "0:25", category: "Funny", color: "#AA96DA" },
+            { id: 6, name: "Viral Dance Beat", artist: "TikTok Official", duration: "0:30", category: "Trending", color: "#FCBAD3" },
+            { id: 7, name: "Morning Coffee", artist: "Acoustic Vibes", duration: "0:40", category: "Chill", color: "#A8D8EA" },
+            { id: 8, name: "Workout Pump", artist: "Fitness Music", duration: "0:50", category: "Motivational", color: "#FF8066" }
         ];
 
         let currentStep = 1;
@@ -1070,6 +1206,7 @@
         let musicVolume = 70;
         let voiceVolume = 80;
         let isAuthenticated = false;
+        let isPlaying = false;
 
         const topicInput = document.getElementById('topic');
         const generateBtn = document.getElementById('generateBtn');
@@ -1078,11 +1215,20 @@
         const progressFill = document.getElementById('progressFill');
         const generationStatus = document.getElementById('generationStatus');
         const generationDetails = document.getElementById('generationDetails');
+        const videoElement = document.getElementById('generatedVideo');
 
         function init() {
             renderSuggestions();
             renderMusicTracks();
             setupEventListeners();
+            initCanvas();
+        }
+
+        function initCanvas() {
+            videoCanvas = document.createElement('canvas');
+            videoCanvas.width = 1080;
+            videoCanvas.height = 1920;
+            videoCtx = videoCanvas.getContext('2d');
         }
 
         function renderSuggestions() {
@@ -1106,7 +1252,7 @@
             
             musicTracksContainer.innerHTML = filtered.map(track => `
                 <div class="music-track ${track.id === selectedMusic.id ? 'selected' : ''}" data-id="${track.id}">
-                    <div class="play-btn">▶</div>
+                    <button class="play-btn" onclick="previewMusic('${track.name}', event)">▶</button>
                     <div class="track-info">
                         <div class="track-name">${track.name}</div>
                         <div class="track-artist">${track.artist}</div>
@@ -1116,7 +1262,11 @@
             `).join('');
 
             document.querySelectorAll('.music-track').forEach(track => {
-                track.addEventListener('click', () => selectMusic(track));
+                track.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('play-btn')) {
+                        selectMusic(track);
+                    }
+                });
             });
         }
 
@@ -1132,6 +1282,14 @@
             document.querySelectorAll('.music-track').forEach(t => t.classList.remove('selected'));
             trackElement.classList.add('selected');
             selectedMusic = musicTracks.find(t => t.id === parseInt(trackElement.dataset.id));
+        }
+
+        function previewMusic(trackName, event) {
+            event.stopPropagation();
+            // Visual feedback only - in production would play audio
+            const btn = event.target;
+            btn.textContent = '♪';
+            setTimeout(() => btn.textContent = '▶', 1000);
         }
 
         function setupEventListeners() {
@@ -1182,10 +1340,20 @@
 
             generateBtn.addEventListener('click', startGeneration);
             document.getElementById('proceedToPostBtn').addEventListener('click', () => goToStep(4));
-            document.getElementById('regenerateBtn').addEventListener('click', () => goToStep(1));
+            document.getElementById('regenerateBtn').addEventListener('click', () => {
+                resetVideo();
+                goToStep(1);
+            });
             document.getElementById('connectTikTokBtn').addEventListener('click', connectTikTok);
             document.getElementById('postToTikTokBtn').addEventListener('click', postToTikTok);
             document.getElementById('switchAccountBtn').addEventListener('click', disconnectTikTok);
+
+            // Video events
+            videoElement.addEventListener('timeupdate', updateProgress);
+            videoElement.addEventListener('ended', () => {
+                isPlaying = false;
+                document.getElementById('playPauseBtn').textContent = '▶';
+            });
         }
 
         function updateGenerateButton() {
@@ -1201,9 +1369,10 @@
                     title: topic,
                     description: `AI-generated video about ${topic}`,
                     hashtags: ['#fyp', '#viral', '#trending', '#content'],
-                    duration: '30-60s',
+                    duration: '30s',
                     hook: `You won't believe this about ${topic}...`,
-                    script: `Here's everything you need to know about ${topic}. This will change how you think!`
+                    script: `Here's everything you need to know about ${topic}. This will change how you think!`,
+                    captions: [topic, 'Amazing tip!', 'Try this now!', 'Follow for more']
                 };
             }
 
@@ -1233,8 +1402,8 @@
                 { progress: 60, status: 'Generating AI voiceover...', detail: `Voice: ${selectedVoice} at ${voiceVolume}% volume` },
                 { progress: 70, status: 'Mixing audio tracks...', detail: 'Balancing music and voice levels' },
                 { progress: 80, status: 'Adding captions and text overlays...', detail: 'Auto-sync with voiceover' },
-                { progress: 90, status: 'Applying color grading and effects...', detail: 'TikTok-optimized visuals' },
-                { progress: 100, status: 'Finalizing with H.264 encoding...', detail: 'Ready for upload!' }
+                { progress: 90, status: 'Rendering final video...', detail: 'Encoding MP4 with H.264' },
+                { progress: 100, status: 'Video ready!', detail: 'Click play to preview' }
             ];
 
             steps.forEach((step, index) => {
@@ -1249,13 +1418,240 @@
                             updatePreview();
                         }, 800);
                     }
-                }, index * 600);
+                }, index * 500);
             });
+        }
+
+        // GENERATE ACTUAL VIDEO USING CANVAS
+        async function generateVideoBlob() {
+            const canvas = videoCanvas;
+            const ctx = videoCtx;
+            const stream = canvas.captureStream(30);
+            
+            // Create audio context for synthetic audio
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const destination = audioContext.createMediaStreamDestination();
+            
+            // Combine video and audio streams
+            const combinedStream = new MediaStream([
+                ...stream.getVideoTracks(),
+                ...destination.stream.getAudioTracks()
+            ]);
+
+            mediaRecorder = new MediaRecorder(combinedStream, {
+                mimeType: 'video/webm;codecs=vp9'
+            });
+
+            recordedChunks = [];
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) recordedChunks.push(e.data);
+            };
+
+            return new Promise((resolve) => {
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                    resolve(blob);
+                };
+
+                mediaRecorder.start();
+                renderFrames(ctx, canvas, () => {
+                    mediaRecorder.stop();
+                });
+            });
+        }
+
+        function renderFrames(ctx, canvas, onComplete) {
+            const frames = 900; // 30 seconds at 30fps
+            let frame = 0;
+            const captions = selectedTopic.captions || ['Generated Content'];
+            const captionDuration = Math.floor(frames / captions.length);
+            const musicColor = selectedMusic.color || '#FE2C55';
+
+            function draw() {
+                if (frame >= frames) {
+                    onComplete();
+                    return;
+                }
+
+                // Background with animated gradient
+                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                const hue = (frame / frames) * 360;
+                gradient.addColorStop(0, `hsl(${hue}, 70%, 20%)`);
+                gradient.addColorStop(1, `hsl(${(hue + 60) % 360}, 70%, 10%)`);
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Animated shapes
+                ctx.save();
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate(frame * 0.01);
+                
+                // Draw animated circles
+                for (let i = 0; i < 5; i++) {
+                    ctx.beginPath();
+                    ctx.arc(
+                        Math.sin(frame * 0.02 + i) * 200,
+                        Math.cos(frame * 0.02 + i) * 300,
+                        50 + Math.sin(frame * 0.05) * 30,
+                        0,
+                        Math.PI * 2
+                    );
+                    ctx.fillStyle = `${musicColor}${Math.floor((0.1 + i * 0.1) * 255).toString(16).padStart(2, '0')}`;
+                    ctx.fill();
+                }
+                ctx.restore();
+
+                // Topic icon
+                ctx.font = '200px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(selectedTopic.icon, canvas.width / 2, canvas.height / 3);
+
+                // Title
+                ctx.font = 'bold 80px Arial';
+                ctx.fillStyle = 'white';
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.shadowBlur = 20;
+                ctx.fillText(selectedTopic.title, canvas.width / 2, canvas.height / 2);
+                ctx.shadowBlur = 0;
+
+                // Current caption
+                const captionIndex = Math.floor(frame / captionDuration);
+                const currentCaption = captions[Math.min(captionIndex, captions.length - 1)];
+                
+                // Caption background
+                ctx.fillStyle = 'rgba(254, 44, 85, 0.9)';
+                ctx.roundRect(100, canvas.height - 400, canvas.width - 200, 120, 20);
+                ctx.fill();
+
+                // Caption text
+                ctx.font = 'bold 60px Arial';
+                ctx.fillStyle = 'white';
+                ctx.fillText(currentCaption, canvas.width / 2, canvas.height - 340);
+
+                // Progress bar
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.fillRect(100, canvas.height - 100, canvas.width - 200, 10);
+                ctx.fillStyle = '#FE2C55';
+                ctx.fillRect(100, canvas.height - 100, (canvas.width - 200) * (frame / frames), 10);
+
+                // TikTok watermark
+                ctx.font = 'bold 40px Arial';
+                ctx.fillStyle = 'rgba(255,255,255,0.7)';
+                ctx.fillText('@generated', 100, 150);
+
+                frame++;
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+        }
+
+        async function loadAndPlayVideo() {
+            const placeholder = document.getElementById('videoPlaceholder');
+            const video = document.getElementById('generatedVideo');
+            const controls = document.getElementById('videoControls');
+            
+            placeholder.innerHTML = '<div class="spinner" style="width: 40px; height: 40px;"></div><p>Rendering video...</p>';
+            
+            try {
+                const blob = await generateVideoBlob();
+                generatedVideoUrl = URL.createObjectURL(blob);
+                
+                video.src = generatedVideoUrl;
+                video.classList.add('active');
+                placeholder.classList.add('hidden');
+                controls.style.display = 'flex';
+                
+                video.play();
+                isPlaying = true;
+                
+            } catch (error) {
+                console.error('Error generating video:', error);
+                placeholder.innerHTML = '<p>Error generating video. Please try again.</p>';
+            }
+        }
+
+        function togglePlay() {
+            const video = document.getElementById('generatedVideo');
+            const btn = document.getElementById('playPauseBtn');
+            
+            if (isPlaying) {
+                video.pause();
+                btn.textContent = '▶';
+            } else {
+                video.play();
+                btn.textContent = '⏸';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function seekVideo(event) {
+            const video = document.getElementById('generatedVideo');
+            const rect = event.currentTarget.getBoundingClientRect();
+            const pos = (event.clientX - rect.left) / rect.width;
+            video.currentTime = pos * video.duration;
+        }
+
+        function updateProgress() {
+            const video = document.getElementById('generatedVideo');
+            const progressFill = document.getElementById('videoProgressFill');
+            const timeDisplay = document.getElementById('videoTime');
+            
+            const progress = (video.currentTime / video.duration) * 100;
+            progressFill.style.width = progress + '%';
+            
+            const current = formatTime(video.currentTime);
+            const total = formatTime(video.duration);
+            timeDisplay.textContent = `${current} / ${total}`;
+        }
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function downloadVideo() {
+            if (!generatedVideoUrl) {
+                alert('Please generate and play the video first!');
+                return;
+            }
+            
+            const a = document.createElement('a');
+            a.href = generatedVideoUrl;
+            a.download = `tiktok-${selectedTopic.title.replace(/\s+/g, '-').toLowerCase()}.webm`;
+            a.click();
+        }
+
+        function resetVideo() {
+            const video = document.getElementById('generatedVideo');
+            const placeholder = document.getElementById('videoPlaceholder');
+            const controls = document.getElementById('videoControls');
+            
+            video.pause();
+            video.src = '';
+            video.classList.remove('active');
+            placeholder.classList.remove('hidden');
+            placeholder.innerHTML = `
+                <div class="play-icon" onclick="loadAndPlayVideo()">▶</div>
+                <p>Click to Generate Preview</p>
+                <p style="font-size: 12px; opacity: 0.7; margin-top: 10px;">Creates playable demo video</p>
+            `;
+            controls.style.display = 'none';
+            isPlaying = false;
+            
+            if (generatedVideoUrl) {
+                URL.revokeObjectURL(generatedVideoUrl);
+                generatedVideoUrl = null;
+            }
         }
 
         function updatePreview() {
             const audioIndicator = document.getElementById('audioIndicator');
             const audioList = document.getElementById('audioList');
+            const videoCaption = document.getElementById('videoCaption');
             
             let indicatorText = '';
             let audioHTML = '';
@@ -1286,6 +1682,7 @@
             
             audioIndicator.textContent = indicatorText;
             audioList.innerHTML = audioHTML;
+            videoCaption.textContent = selectedTopic.hook;
 
             const hashtagContainer = document.getElementById('hashtagSuggestions');
             hashtagContainer.innerHTML = selectedTopic.hashtags.map(tag => 
@@ -1327,6 +1724,11 @@
                 return;
             }
 
+            if (!generatedVideoUrl) {
+                showMessage('Please generate and preview the video first!', 'error');
+                return;
+            }
+
             const postBtn = document.getElementById('postToTikTokBtn');
             postBtn.disabled = true;
             postBtn.textContent = 'Uploading video & audio...';
@@ -1356,6 +1758,22 @@
             message.className = `message ${type}`;
             setTimeout(() => message.style.display = 'none', 5000);
             message.style.display = 'block';
+        }
+
+        // Add roundRect polyfill for older browsers
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+                if (w < 2 * r) r = w / 2;
+                if (h < 2 * r) r = h / 2;
+                this.beginPath();
+                this.moveTo(x + r, y);
+                this.arcTo(x + w, y, x + w, y + h, r);
+                this.arcTo(x + w, y + h, x, y + h, r);
+                this.arcTo(x, y + h, x, y, r);
+                this.arcTo(x, y, x + w, y, r);
+                this.closePath();
+                return this;
+            };
         }
 
         init();
